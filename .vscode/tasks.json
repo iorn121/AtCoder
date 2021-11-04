@@ -5,12 +5,12 @@
       "label": "runCode",
       "detail": "test my code for calculating samples",
       "type": "shell",
-      "command": "oj",
+      "command": "/System/Volumes/Data/opt/homebrew/bin/oj",
       "args": [
         // コマンドへ渡す引数
         "t",
         "-c",
-        "\"python3 ${fileDirname}/main.py\"",
+        "\"/opt/homebrew/bin/python3 ${fileDirname}/main.py\"",
         "-d",
         "${fileDirname}/tests"
       ],
