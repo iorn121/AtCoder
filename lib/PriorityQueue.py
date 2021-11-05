@@ -1,5 +1,3 @@
-# 解説：https://qiita.com/u2dayo/items/1f85cbf897d4b9178325
-
 import heapq
 
 
@@ -67,34 +65,3 @@ class PriorityQueue:
 
     def __repr__(self):
         return self.__str__()
-
-
-n, m = map(int, input().split())
-cnt = [0]*(n+1)
-next = [[] for _ in range(n+1)]
-
-que = PriorityQueue()
-
-for i in range(m):
-    a, b = map(int, input().split())
-    next[a].append(b)
-    cnt[b] += 1
-
-for i in range(1, n+1):
-    if cnt[i] == 0:
-        que.push(i)
-
-ans = []
-
-while que:
-    x = que.pop()
-    ans.append(x)
-    for v in next[x]:
-        cnt[v] -= 1
-        if cnt[v] == 0:
-            que.push(v)
-
-if len(ans) == n:
-    print(*ans)
-else:
-    print(-1)
