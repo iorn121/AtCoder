@@ -22,8 +22,20 @@
     {
       "label": "submitCode",
       "type": "shell",
-      "command": "acc",
-      "args": ["s", "${fileDirname}/main.py"]
+      "command": "/Users/iori_watanabe/.nvm/versions/node/v17.0.1/bin/acc",
+      "args": [
+        "submit",
+        "-c",
+        "-t",
+        "${fileDirname}/main.py",
+        "--",
+        "--guess-python-interpreter",
+        "pypy"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
     }
   ]
 }
