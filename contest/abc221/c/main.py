@@ -1,12 +1,12 @@
 from itertools import permutations
 
-S = list(input())
-n = len(S)
-ans = 0
-for i in permutations(S):
-    for j in range(1, (n+1)//2):
-        x = int("".join(i[:j]))
-        y = int("".join(i[j:]))
-        ans = max(ans, x*y)
+S = sorted(input())[::-1]
+A = S[0::2]
+B = S[1::2]
 
-print(ans)
+for i in range(min(len(A), len(B))):
+    if A[i] != B[i]:
+        A[i], B[i] = B[i], A[i]
+        break
+
+print(int("".join(A))*int("".join(B)))
