@@ -1,15 +1,18 @@
-from collections import Counter
 
 N, K = map(int, input().split())
-cnt = 0
-A = list(map(int, input().split()))
-A.sort(reverse=True)
-AA=A[:K]
-BB=A[K:]
-while Counter(AA)[0]!=0 and BB ==[]:
-    x=min(AA)
-    cnt += x
-    AA=[i-x for i in AA]
-    
 
-print(cnt)
+A = list(map(int, input().split()))
+
+ok = 0
+ng = 10**24
+while ok+1 < ng:
+    md = (ok+ng)//2
+    cnt = 0
+    for i in range(N):
+        cnt += min(A[i], md)
+    if cnt >= K*md:
+        ok = md
+    else:
+        ng = md
+
+print(ok)
