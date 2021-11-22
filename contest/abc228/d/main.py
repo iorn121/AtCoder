@@ -1,37 +1,38 @@
+import sys
+sys.setrecursionlimit(10**9)
+
 Q = int(input())
 mod = 2**20
-modify = []
-ans = []
-parent = [i for i in range(mod)]
+par = [-1]*mod
+ans = [-1]*mod
 
 
 def findP(u):
-    while parent[u] != u:
-        u, parent[u] = parent[u], parent[parent[u]]
-    return u
+    if par[u] < 0:
+        return u
+    else:
+        par[u] = findP(par[u])
+        return par[u]
 
 
 def union(u, v):
-    if u > v:
-        u, v = v, u
-    if findP(u) != findP(v):
-        parent[u] = v
-        return True
-    else:
-        return False
+    uu = findP(u)
+    vv = findP(v)
+    if uu == vv:
+        return
+    par[uu] = vv
 
 
 for i in range(1, Q+1):
     t, x = map(int, input().split())
     if t == 1:
         xx = x % mod
-        if xx in modify:
-            y = findP(xx)
-            modify.append(y+1)
-            union(y, y+1)
+        if ans[xx] == -1:
+            h = xx
         else:
-            modify.append(xx)
-        ans.append(x)
+            h = findP(xx)
+        ans[h] = x
+        union(h, (h+1) % mod)
     else:
         xx = x % mod
-        print(-1 if xx not in modify else ans[modify.index(xx)])
+        print(ans[xx])
