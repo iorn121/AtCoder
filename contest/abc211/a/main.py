@@ -1,11 +1,5 @@
-N, K, M = map(int, input().split())
+from decimal import Decimal
 
-mod = 998244353
+A, B = map(Decimal, input().split())
 
-powN = pow(K, N, mod-1)
-
-ans = pow(M, powN, mod)
-
-if ans % mod == 0:
-    ans = 0
-print(ans)
+print((A+2*B)/3)
