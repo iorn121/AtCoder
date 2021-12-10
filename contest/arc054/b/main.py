@@ -3,7 +3,7 @@ P = float(input())
 
 
 def f(x):
-    return x+P/2**(x/1.5)
+    return x+P*2**-(x/1.5)
 
 
 def bibun(x):
@@ -13,7 +13,7 @@ def bibun(x):
 l = 0
 r = 10**10
 
-while r-l > (1 >> 8):
+while r-l > 0.000001:
     mid = (l+r)/2
     a = bibun(mid)
     if a > 0:
