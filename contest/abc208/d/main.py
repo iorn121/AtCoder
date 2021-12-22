@@ -1,5 +1,5 @@
 N, M = map(int, input().split())
-d = [[1 << 60]*N for i in range(N)]
+d = [[10**10]*N for i in range(N)]
 
 for i in range(N):
     d[i][i] = 0
@@ -14,7 +14,7 @@ for k in range(N):
     for i in range(N):
         for j in range(N):
             nxt[i][j] = min(d[i][j], d[i][k]+d[k][j])
-            if nxt[i][j] < 1 << 59:
+            if nxt[i][j] < 10**10:
                 ans += nxt[i][j]
     d = nxt
 print(ans)
