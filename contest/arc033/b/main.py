@@ -1,0 +1,7 @@
+Na, Nb = map(int, input().split())
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+a = set(A)
+b = set(B)
+ans = len(a & b)/len(a | b)
+print(ans)
