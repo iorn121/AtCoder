@@ -10,7 +10,8 @@ ans = 10**9
 #         if rest % coins[2] == 0:
 #             ans = min(ans, i+j+rest // coins[2])
 
-A,B,C=reversed(sorted(map(int, input().split())))
+A, B, C = reversed(sorted(map(int, input().split())))
+
 
 def gcd(a, b):
     if b == 0:
@@ -19,9 +20,18 @@ def gcd(a, b):
     y -= a//b*x
     return g, x, y
 
-g,x,y=gcd(b,c)
+
+g, x, y = gcd(B, C)
 
 for i in range(10000):
-    
+    n = N-A*i
+    if n >= 0 and n % g == 0:
+        j = x*(n//g)
+        k = y*(n//g)
+        nk = k % (B//g)
+        j += (k-nk)*(C//g)//(B//g)
+        k = nk
+        if j >= 0 and k >= 0:
+            ans = min(ans, i+j+k)
 
 print(ans)
