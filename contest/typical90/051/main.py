@@ -5,6 +5,18 @@ leftA = A[:N//2]
 rightA = A[N//2:]
 
 
+# def print_func_info(func):
+#     def wrapper(*args, **kwargs):
+#         print(f"executing {func}")
+#         for arg in args:
+#             print(f":param {type(arg)} {arg}")
+#         results = func(*args, **kwargs)
+#         for result in results:
+#             print(f":return: {result}")
+#         return results
+#     return wrapper
+
+
 class Product_list:
     def __init__(self, l):
         self.length = len(l)
