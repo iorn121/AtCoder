@@ -11,9 +11,9 @@ S=list(map(int, input().split()))
 bit_s=0
 for i,s in enumerate(reversed(S)):
     if s:
-        bit_s|=s<<i
-# print(bits)
+        bit_s|=s<<iprint(bits)
 # print(bit_s)
+# 
 base=[-1]*(M+1)
 
 cnt=0
