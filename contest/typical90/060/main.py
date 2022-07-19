@@ -25,7 +25,7 @@ def LIS(num_list):
 l_left = LIS(A)
 l_right = LIS(A[::-1])
 
-ans = 0
+ans =-1
 for i in range(N):
-    ans = max(ans, l_left[i]+l_right[i]-1)
+    ans = max(ans, l_left[i]+l_right[N-i-1]-1)
 print(ans)
