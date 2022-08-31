@@ -1,33 +1,31 @@
-N,K= map(int, input().split())
-P= list(map(int, input().split()))
+import bisect
+import imp
 
-field=[]
-ans=[-1]*N
-for i,p in enumerate(P):
-    p-=1
-    pos=0
-    if field==[]:
-        field.append([p])
-    elif field[-1][0]<p:
-        field.append([p])
+
+N, K = map(int, input().split())
+P = list(map(int, input().split()))
+
+front = [0]
+field = [[]]
+num = [0]
+ans = [-1]*N
+for i, p in enumerate(P):
+    if front[-1] < p:
+        if K == 1:
+            ans[p-1] = i+1
+        else:
+            front.append(p)
+            field.append([p])
+            num.append(1)
     else:
-        left=-1
-        right=len(field)+1
-        while left+1<right:
-            mid = (left+right)//2
-            if field[mid][-1]>=p:
-                right=mid
-            else:
-                left=mid
-        field[right].append(p)
-        pos=right
-    # print(field)
-    if len(field[pos])>=K:
-        # print(field[pos])
-        for x in field[pos]:
-            ans[x]=i+1
-        del field[pos]
-
-for i in ans:
-    print(i)
-    
+        j = bisect.bisect_left(front, p)
+        field[j].append(p)
+        num[j] += 1
+        front[j] = p
+        if num[j] == K:
+            for card in field[j]:
+                ans[card-1] = i+1
+            front.pop(j)
+            field.pop(j)
+            num.pop(j)
+print(*ans, sep='\n')
