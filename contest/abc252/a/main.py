@@ -8,3 +8,7 @@ def print_func_info(func):
             print(f":return: {result}")
         return results
     return wrapper
+
+
+N = int(input())
+print(chr(N))
