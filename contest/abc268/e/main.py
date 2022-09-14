@@ -6,7 +6,7 @@ cnt=[0]*N
 tmp=0
 half=0
 for i,p in enumerate(P):
-    sa=(i-p)%N
+    sa=(p-i)%N
     cnt[sa]+=1
     if sa<K:
         half+=1
