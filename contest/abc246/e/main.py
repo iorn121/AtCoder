@@ -1,29 +1,32 @@
 from collections import deque
 N = int(input())
-A = list(map(int, input().split()))
-B = list(map(int, input().split()))
-for i in range(2):
-    A[i] -= 1
-    B[i] -= 1
-S = [input() for i in range(N)]
-check = [[-1]*N for i in range(N)]
+Ax, Ay = map(int, input().split())
+Bx, By = map(int, input().split())
+
+S = [input() for _ in range(N)]
+for i in range(N):
+    S[i] = "#"+S[i]+"#"
+edge = ["#"*(N+2)]
+S = edge+S+edge
+INF = 1500**2
+visited = [[INF]*(N+2) for _ in range(N+2)]
 dxy = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
-que = deque()
-que.append(A)
-check[A[1]][A[0]] = 0
+que = deque([(Ax, Ay)])
+visited[Ax][Ay] = 0
 while que:
-    cx, cy = que.pop()
-    cp = check[cy][cx]
-    for i in range(4):
-        for j in range(1, N):
-            nx = cx+dxy[i][0]*j
-            ny = cy+dxy[i][1]*j
-            if nx < 0 or ny < 0 or nx >= N or ny >= N:
+    cx, cy = que.popleft()
+    cnt = visited[cx][cy]+1
+    for dx, dy in dxy:
+        x, y = cx, cy
+        while True:
+            x += dx
+            y += dy
+            if S[x][y] == "#" or visited[x][y] < cnt:
                 break
-            if check[ny][nx] != -1:
-                continue
-            if S[nx][ny] == '#':
-                break
-            check[ny][nx] = cp+1
-            que.append([nx, ny])
-print(check[B[1]][B[0]])
+            if Bx == x and By == y:
+                exit(print(cnt))
+            if visited[x][y] > cnt:
+                que.append((x, y))
+                visited[x][y] = cnt
+
+print(-1)
