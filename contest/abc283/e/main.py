@@ -21,4 +21,4 @@ def LS(H): return [sys.stdin.readline().rstrip().split() for _ in range(H)]
 
 H,W=MI()
 S=LS(H)
-
+dp=[[[0]* for j in range(2)]for i in range(2)]
