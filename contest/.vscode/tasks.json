@@ -6,7 +6,7 @@
     {
       "label": "oj t",
       "type": "shell",
-      "command": "/home/iori/.local/bin/oj t -c \"python3 main.py\" -d tests",
+      "command": "/home/iori/.local/bin/oj t -c 'python3 ${file}' -d ${fileDirname}/tests",
 
       "options": {
         "cwd": "${workspaceFolder}"
