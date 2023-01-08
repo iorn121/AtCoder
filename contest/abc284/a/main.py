@@ -20,20 +20,7 @@ def LS(): return list(sys.stdin.readline().rstrip().split())
 # nCr ans=math.comb(n,r)
 
 
-N, K, D = MI()
-A = LI()
-
-dp = [[[-1]*D for _ in range(K+1)] for _ in range(N+1)]
-dp[0][0][0] = 0
-
-for i in range(N):
-    for j in range(K+1):
-        for k in range(D):
-            if dp[i][j][k] == -1:
-                continue
-            dp[i+1][j][k] = max(dp[i][j][k], dp[i+1][j][k])
-            if j == K:
-                continue
-            dp[i+1][j+1][(k+A[i]) % D] = max(dp[i][j][k]+A[i], dp[i+1][j+1][(A[i]+k) % D])
-
-print(dp[-1][-1][0])
+N = I()
+Ss = [S() for _ in range(N)]
+for s in reversed(Ss):
+    print(s)

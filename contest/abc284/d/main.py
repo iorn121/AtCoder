@@ -20,20 +20,31 @@ def LS(): return list(sys.stdin.readline().rstrip().split())
 # nCr ans=math.comb(n,r)
 
 
-N, K, D = MI()
-A = LI()
+def prime(n):
+    is_prime = [True] * (n + 1)
+    is_prime[0], is_prime[1] = False, False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if is_prime[i]:
+            for j in range(2 * i, n + 1, i):
+                is_prime[j] = False
+    return is_prime
 
-dp = [[[-1]*D for _ in range(K+1)] for _ in range(N+1)]
-dp[0][0][0] = 0
 
-for i in range(N):
-    for j in range(K+1):
-        for k in range(D):
-            if dp[i][j][k] == -1:
-                continue
-            dp[i+1][j][k] = max(dp[i][j][k], dp[i+1][j][k])
-            if j == K:
-                continue
-            dp[i+1][j+1][(k+A[i]) % D] = max(dp[i][j][k]+A[i], dp[i+1][j+1][(A[i]+k) % D])
+prime_flg = prime(3*10**6)
+prime_list = []
+for i in range(3*10**6):
+    if prime_flg[i]:
+        prime_list.append(i)
+T = I()
 
-print(dp[-1][-1][0])
+for _ in range(T):
+    N = I()
+    for i in prime_list:
+        j = int(math.sqrt(N//i))
+        if N % i == 0:
+            if N % pow(i, 2) == 0:
+                print(i, N//pow(i, 2))
+                break
+            elif N % pow(j, 2) == 0:
+                print(j, i)
+                break
