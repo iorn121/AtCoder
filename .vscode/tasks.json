@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "oj t",
+      "type": "shell",
+      "command": "/home/iori/.local/bin/oj t -c 'python3 ${file}' -d ${fileDirname}/tests",
+
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
