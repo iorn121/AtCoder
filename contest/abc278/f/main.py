@@ -99,3 +99,23 @@ def modinv(a, mod):
         raise Exception("moduler inverse does not exist")
     else:
         return x % mod
+
+
+N = I()
+S_list = SS(N)
+
+info = [(ord(s[0])-ord('a'), ord(s[-1])-ord('a')) for s in S_list]
+
+dp = [[0]*26 for _ in range(1 << N)]
+
+for bit in range(1 << N):
+    for s in range(N):
+        if (bit >> s) & 1:
+            continue
+        if dp[bit][info[s][1]] == 0:
+            dp[bit | (1 << s)][info[s][0]] = max(1, dp[bit | (1 << s)][info[s][0]])
+
+if 1 in dp[-1]:
+    print("First")
+else:
+    print("Second")

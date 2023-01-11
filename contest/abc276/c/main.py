@@ -101,6 +101,26 @@ def modinv(a, mod):
     else:
         return x % mod
 
-N=I()
-P=LI()
 
+N = I()
+P = LI()
+
+back_list = []
+former = N+1
+for p in P[::-1]:
+    if former > p:
+        back_list.append(p)
+        former = p
+    else:
+        back_list.sort()
+        x = bisect.bisect_right(back_list, p)
+        front = N-len(back_list)-1
+        change = back_list.pop(x-1)
+        ans = P[:front]
+        # print(ans)
+        # print(back_list)
+        ans.append(change)
+        back_list.insert(x-1, p)
+        ans.extend(back_list[::-1])
+        print(*ans)
+        exit()
