@@ -14,7 +14,7 @@ def LI(): return list(map(int, sys.stdin.readline().rstrip().split()))
 def LII(H): return [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(H)]
 def S(): return sys.stdin.readline().rstrip()
 def SS(H): return [S() for _ in range(H)]
-def MS(): return sys.stdin.readline().rstrip().split()
+def LS(): return list(sys.stdin.readline().rstrip().split())
 def ARRAY(L): return array("i", L)
 
 
@@ -102,92 +102,8 @@ def modinv(a, mod):
         return x % mod
 
 
-class UnionFind():
-    def __init__(self, n):
-        self.n = n
-        self.parents = [-1] * n
-
-    def find(self, x):
-        if self.parents[x] < 0:
-            return x
-        else:
-            self.parents[x] = self.find(self.parents[x])
-            return self.parents[x]
-
-    def union(self, x, y):
-        x = self.find(x)
-        y = self.find(y)
-
-        if x == y:
-            return
-
-        if self.parents[x] > self.parents[y]:
-            x, y = y, x
-
-        self.parents[x] += self.parents[y]
-        self.parents[y] = x
-
-    def size(self, x):
-        return -self.parents[self.find(x)]
-
-    def same(self, x, y):
-        return self.find(x) == self.find(y)
-
-    def members(self, x):
-        root = self.find(x)
-        return [i for i in range(self.n) if self.find(i) == root]
-
-    def roots(self):
-        return [i for i, x in enumerate(self.parents) if x < 0]
-
-    def group_count(self):
-        return len(self.roots())
-
-    def all_group_members(self):
-        group_members = collections.defaultdict(list)
-        for member in range(self.n):
-            group_members[self.find(member)].append(member)
-        return group_members
-
-    def __str__(self):
-        return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
-
-
-N, M, K = MI()
-G = [[] for _ in range(2*N)]
-for _ in range(M):
-    u, v, a = MI()
-    u -= 1
-    v -= 1
-    if a:
-        G[u].append((v, 1))
-        G[v].append((u, 1))
-    else:
-        G[u+N].append((v+N, 1))
-        G[v+N].append((u+N, 1))
-S = map(int, S().split())
-for s in S:
-    s -= 1
-    G[s].append((s+N, 0))
-    G[s+N].append((s, 0))
-
-que = collections.deque()
-que.append(0)
-res = [10**9]*(2*N)
-res[0] = 0
-while que:
-    now = que.popleft()
-    for nex, value in G[now]:
-        cnt = res[now]+value
-        if res[nex] > cnt:
-            res[nex] = cnt
-            if value == 1:
-                que.append(nex)
-            else:
-                que.appendleft(nex)
-
-ans = min(res[N-1], res[-1])
-if ans == 10**9:
-    print(-1)
+a, b = MI()
+if b//2 == a:
+    print("Yes")
 else:
-    print(ans)
+    print("No")

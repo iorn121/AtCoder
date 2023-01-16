@@ -153,41 +153,28 @@ class UnionFind():
         return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
 
 
-N, M, K = MI()
-G = [[] for _ in range(2*N)]
-for _ in range(M):
-    u, v, a = MI()
-    u -= 1
-    v -= 1
-    if a:
-        G[u].append((v, 1))
-        G[v].append((u, 1))
+N = I()
+pairs = []
+cnt = set()
+convert = {}
+for _ in range(N):
+    S, T = MS()
+    s, t = -1, -1
+    if S in convert:
+        s = convert[S]
     else:
-        G[u+N].append((v+N, 1))
-        G[v+N].append((u+N, 1))
-S = map(int, S().split())
-for s in S:
-    s -= 1
-    G[s].append((s+N, 0))
-    G[s+N].append((s, 0))
-
-que = collections.deque()
-que.append(0)
-res = [10**9]*(2*N)
-res[0] = 0
-while que:
-    now = que.popleft()
-    for nex, value in G[now]:
-        cnt = res[now]+value
-        if res[nex] > cnt:
-            res[nex] = cnt
-            if value == 1:
-                que.append(nex)
-            else:
-                que.appendleft(nex)
-
-ans = min(res[N-1], res[-1])
-if ans == 10**9:
-    print(-1)
-else:
-    print(ans)
+        s = len(convert)
+        convert[S] = s
+    if T in convert:
+        t = convert[T]
+    else:
+        t = len(convert)
+        convert[T] = t
+    pairs.append((s, t))
+uf = UnionFind(len(convert))
+for s, t in pairs:
+    if uf.same(s, t):
+        exit(print("No"))
+    else:
+        uf.union(s, t)
+print("Yes")
