@@ -100,3 +100,48 @@ def modinv(a, mod):
         raise Exception("moduler inverse does not exist")
     else:
         return x % mod
+
+
+H, W = MI()
+C = SS(H)
+sy, sx = -1, -1
+for i in range(H):
+    for j in range(W):
+        if C[i][j] == "S":
+            sy, sx = i, j
+dxy = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+que = collections.deque()
+res = [[-1]*W for _ in range(H)]
+color = [[-1]*W for _ in range(H)]
+color[sy][sx] = 0
+for i, (dy, dx) in enumerate(dxy):
+    ny, nx = sy+dy, sx+dx
+    if not (0 <= ny < H and 0 <= nx < W):
+        continue
+    if C[ny][nx] == "#":
+        continue
+    color[ny][nx] = i
+    res[ny][nx] = 1
+    que.append((ny, nx))
+res[sy][sx] = 0
+while que:
+    cy, cx = que.pop()
+    c = res[cy][cx]
+    for dy, dx in dxy:
+        ny, nx = cy+dy, cx+dx
+        if not (0 <= ny < H and 0 <= nx < W):
+            continue
+        if C[ny][nx] == "#":
+            continue
+        if res[ny][nx] != -1:
+            if color[ny][nx] == color[cy][cx] or (ny == sy and nx == sx):
+                continue
+            elif color[ny][nx] != color[cy][cx] and res[ny][nx]+c >= 3:
+                exit(print("Yes"))
+        res[ny][nx] = max(res[ny][nx], c+1)
+        que.append((ny, nx))
+        color[ny][nx] = color[cy][cx]
+
+# print(color)
+# print(res)
+print("No")

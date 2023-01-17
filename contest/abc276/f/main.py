@@ -18,6 +18,8 @@ def LS(): return list(sys.stdin.readline().rstrip().split())
 def ARRAY(L): return array("i", L)
 
 
+MOD = 998244353
+
 # 累積和 ans=list(itertools.accumulate(L))
 # 順列 ans=list(itertools.permutation(L))
 # 重複なし組み合わせ ans=list(itertools.combinations(L,2))
@@ -94,9 +96,44 @@ def xgcd(a, b):
 
 
 # 逆元を求める
-def modinv(a, mod):
+def modinv(a, mod=MOD):
     g, x, y = xgcd(a, mod)
     if g != 1:
         raise Exception("moduler inverse does not exist")
     else:
         return x % mod
+
+
+class BIT:
+    # 長さN+1の配列を初期化
+    def __init__(self, N):
+        self.size = N
+        self.bit = [0]*(N+1)
+
+    # i番目までの和を求める
+    def sum(self, i):
+        res = 0
+        while i > 0:
+            res += self.bit[i]  # フェニック木のi番目の値を加算
+            i -= -i & i  # 最も右にある1の桁を0にする
+        return res
+
+    # i番目の値にxを足して更新する
+    def add(self, i, x):
+        while i <= self.size:
+            self.bit[i] += x  # フェニック木のi番目にxを足して更新
+            i += -i & i  # 最も右にある1の桁に1を足す
+
+
+N = I()
+A = LI()
+M = 2*10**5
+fw1 = BIT(M)
+fw2 = BIT(M)
+now_sum = 0
+for i, a in enumerate(A, 1):
+    ak = (fw1.sum(a)*a+fw2.sum(M)-fw2.sum(a)) % MOD
+    now_sum += (ak*2+a) % MOD
+    print(now_sum*modinv(i)**2 % MOD)
+    fw1.add(a, 1)
+    fw2.add(a, a)

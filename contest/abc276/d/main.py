@@ -38,7 +38,7 @@ def prime_list(n: int):
 
 # 素因数分解
 def prime_factorization(N: int):
-    arr = []
+    arr = {}
     sqrt = int(math.sqrt(N))
     for i in range(2, sqrt+1):
         if N % i == 0:
@@ -46,9 +46,9 @@ def prime_factorization(N: int):
             while N % i == 0:
                 cnt += 1
                 N //= i
-            arr.append([i, cnt])
+            arr[i] = cnt
     if N != 1:
-        arr.append([N, 1])
+        arr[N] = 1
     return arr
 
 
@@ -100,3 +100,25 @@ def modinv(a, mod):
         raise Exception("moduler inverse does not exist")
     else:
         return x % mod
+
+
+N = I()
+A = LI()
+g = 0
+for i, a in enumerate(A):
+    g = math.gcd(g, a)
+
+
+cnt_2 = 0
+cnt_3 = 0
+for i, a in enumerate(A):
+    a //= g
+    while a % 2 == 0:
+        a //= 2
+        cnt_2 += 1
+    while a % 3 == 0:
+        a //= 3
+        cnt_3 += 1
+    if a != 1:
+        exit(print(-1))
+print(cnt_2+cnt_3)
