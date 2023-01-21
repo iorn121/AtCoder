@@ -14,9 +14,11 @@ def LI(): return list(map(int, sys.stdin.readline().rstrip().split()))
 def LII(H): return [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(H)]
 def S(): return sys.stdin.readline().rstrip()
 def SS(H): return [S() for _ in range(H)]
-def MS(): return sys.stdin.readline().rstrip().split()
+def LS(): return list(sys.stdin.readline().rstrip().split())
 def ARRAY(L): return array("i", L)
 
+
+MOD = 998244353
 
 # 累積和 ans=list(itertools.accumulate(L))
 # 順列 ans=list(itertools.permutation(L))
@@ -94,7 +96,7 @@ def xgcd(a, b):
 
 
 # 逆元を求める
-def modinv(a, mod):
+def modinv(a, mod=MOD):
     g, x, y = xgcd(a, mod)
     if g != 1:
         raise Exception("moduler inverse does not exist")
@@ -102,40 +104,37 @@ def modinv(a, mod):
         return x % mod
 
 
-h, w, rs, cs = MI()
-rs -= 1
-cs -= 1
-N = I()
-positions = []
+class BIT:
+    # 長さN+1の配列を初期化
+    def __init__(self, N):
+        self.size = N
+        self.bit = [0]*(N+1)
+
+    # i番目までの和を求める
+    def sum(self, i):
+        res = 0
+        while i > 0:
+            res += self.bit[i]  # フェニック木のi番目の値を加算
+            i -= -i & i  # 最も右にある1の桁を0にする
+        return res
+
+    # i番目の値にxを足して更新する
+    def add(self, i, x):
+        while i <= self.size:
+            self.bit[i] += x  # フェニック木のi番目にxを足して更新
+            i += -i & i  # 最も右にある1の桁に1を足す
+
+
+N, A, B = MI()
+S = S()
+ans = 10**13
 for i in range(N):
-    r, c = map(int, input().split())
-    positions.append((r-1, c-1))
-horizontal = sorted([-1, h*w] + [i*w + j for i, j in positions])
-vertical = sorted([-1, h*w] + [i + j*h for i, j in positions])
-
-Q = I()
-for _ in range(Q):
-    d, l = MS()
-    l = int(l)
-    if d == "L":
-        p = rs*w+cs
-        index = bisect.bisect(horizontal, p)
-        move_to = max(horizontal[index-1], rs*w-1)
-        rs -= min(l, p-move_to-1)
-    elif d == "R":
-        p = rs*w+cs
-        index = bisect.bisect(vertical, p)
-        move_to = min(horizontal[index], (rs+1)*w)
-        rs += min(move_to-p-1, l)
-    elif d == "U":
-        p = rs+cs*h
-        index = bisect.bisect(vertical, p)
-        move_to = max(vertical[index-1], cs*h-1)
-        cs -= min(l, p-move_to-1)
-    else:
-        p = rs+cs*h
-        index = bisect.bisect(vertical, p)
-        move_to = max(vertical[index], (cs+1)*h)
-        cs += min(l, move_to-p-1)
-
-    print(rs+1, cs+1)
+    nS = S[i:]+S[:i]
+    cnt = 0
+    for j in range((N+1)//2):
+        if nS[j] == nS[-j-1]:
+            cnt += 1
+        # print(nS[j], nS[-j-1])
+    # print(nS, cnt)
+    ans = min(ans, ((N+1)//2-cnt)*B+A*i)
+print(ans)
