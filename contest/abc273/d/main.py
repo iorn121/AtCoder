@@ -121,21 +121,21 @@ for _ in range(Q):
         p = rs*w+cs
         index = bisect.bisect(horizontal, p)
         move_to = max(horizontal[index-1], rs*w-1)
-        rs -= min(l, p-move_to-1)
+        cs -= min(l, p-move_to-1)
     elif d == "R":
         p = rs*w+cs
-        index = bisect.bisect(vertical, p)
+        index = bisect.bisect(horizontal, p)
         move_to = min(horizontal[index], (rs+1)*w)
-        rs += min(move_to-p-1, l)
+        cs += min(move_to-p-1, l)
     elif d == "U":
         p = rs+cs*h
         index = bisect.bisect(vertical, p)
         move_to = max(vertical[index-1], cs*h-1)
-        cs -= min(l, p-move_to-1)
+        rs -= min(l, p-move_to-1)
     else:
         p = rs+cs*h
         index = bisect.bisect(vertical, p)
-        move_to = max(vertical[index], (cs+1)*h)
-        cs += min(l, move_to-p-1)
+        move_to = min(vertical[index], (cs+1)*h)
+        rs += min(l, move_to-p-1)
 
     print(rs+1, cs+1)
