@@ -286,9 +286,8 @@ def make_kmp_table(t):
             i += 1
     return tbl
 
+
 # 文字列Sの中に文字列Tが存在するかどうか
-
-
 def kmp(s, t):
     matched_indices = []
     tbl = make_kmp_table(t)
@@ -310,6 +309,7 @@ def kmp(s, t):
     return matched_indices
 
 
+# 強連結成分分解
 class SCC:
     def __init__(self, n):
         self.n = n
