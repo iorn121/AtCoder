@@ -600,46 +600,22 @@ class LazySegTree_RUQ:
         return res
 
 
-dxy = [[-1, 0], [1, 0], [0, 1], [0, -1]]
-N, M = MI()
-field = SS(N)
-goal = (-1, -1)
-for i, row in enumerate(field):
-    for j, point in enumerate(row):
-
-        if point == "g":
-            gy, gx = i, j
-d = [[-1]*M for _ in range(N)]
-d[gy][gx] = 10
-hq = []
-heapq.heappush(hq, (-10.0, gy, gx))
-answer = -1
-while hq:
-    if answer != -1:
-        break
-    score, ny, nx = heapq.heappop(hq)
-    # print(score, ny, nx)
-    if d[ny][nx] > -score:
-        continue
-    score = -score*0.99
-    for dy, dx in dxy:
-        y = dy+ny
-        x = dx+nx
-        if not (0 <= y < N and 0 <= x < M):
-            continue
-        # print(y, x, field[y][x])
-        if field[y][x] == "#" or field[y][x] == "g":
-            continue
-        if field[y][x] == "s":
-            # print("find s", score)
-            answer = score
-            break
-        nscore = min(score, float(field[y][x]))
-        if d[y][x] < nscore:
-            d[y][x] = nscore
-            heapq.heappush(hq, (-nscore, y, x))
+def solve(n, k, s):
+    if k < n:
+        s1 = s+s[:K][::-1]
+        s2 = s[:K][::-1]+s
+        return s1 == s1[::-1] and s2 == s2[::-1]
     else:
-        continue
-    break
-# print(d)
-print(answer)
+        x = k-n
+        s1 = s + s[::-1]+s[:x][::-1]
+        s2 = s[::-1]+s[:x][::-1]+s
+        return s1 == s1[::-1] and s2 == s2[::-1]
+
+
+T = I()
+for _ in range(T):
+    N, K = MI()
+    s = S()
+    K %= 2*N
+    flg = solve(N, K, s)
+    print("Yes" if flg else "No")

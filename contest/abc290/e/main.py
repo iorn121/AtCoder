@@ -600,46 +600,31 @@ class LazySegTree_RUQ:
         return res
 
 
-dxy = [[-1, 0], [1, 0], [0, 1], [0, -1]]
-N, M = MI()
-field = SS(N)
-goal = (-1, -1)
-for i, row in enumerate(field):
-    for j, point in enumerate(row):
-
-        if point == "g":
-            gy, gx = i, j
-d = [[-1]*M for _ in range(N)]
-d[gy][gx] = 10
-hq = []
-heapq.heappush(hq, (-10.0, gy, gx))
-answer = -1
-while hq:
-    if answer != -1:
-        break
-    score, ny, nx = heapq.heappop(hq)
-    # print(score, ny, nx)
-    if d[ny][nx] > -score:
-        continue
-    score = -score*0.99
-    for dy, dx in dxy:
-        y = dy+ny
-        x = dx+nx
-        if not (0 <= y < N and 0 <= x < M):
-            continue
-        # print(y, x, field[y][x])
-        if field[y][x] == "#" or field[y][x] == "g":
-            continue
-        if field[y][x] == "s":
-            # print("find s", score)
-            answer = score
-            break
-        nscore = min(score, float(field[y][x]))
-        if d[y][x] < nscore:
-            d[y][x] = nscore
-            heapq.heappush(hq, (-nscore, y, x))
-    else:
-        continue
-    break
-# print(d)
-print(answer)
+N = I()
+A = LI()
+ans = N*(N-1)//2
+counter_A = collections.Counter(A)
+for (k, v) in counter_A.items():
+    ans -= v*(v-1)//2
+for i, a in enumerate(A):
+    if i < N-1 and a != A[i+1]:
+        s = i
+        e = i+1
+        tmp = 0
+        while 0 < s and e < N-1:
+            if A[s] != A[e]:
+                tmp += 1
+            ans += tmp
+            s -= 1
+            e += 1
+    if i < N-2 and a != A[i+2]:
+        s = i
+        e = i+2
+        tmp = 0
+        while 0 < s and e < N-1:
+            if A[s] != A[e]:
+                tmp += 1
+            ans += tmp
+            s -= 1
+            e += 1
+print(ans)
