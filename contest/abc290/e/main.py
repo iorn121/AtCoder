@@ -602,29 +602,18 @@ class LazySegTree_RUQ:
 
 N = I()
 A = LI()
-ans = N*(N-1)//2
-counter_A = collections.Counter(A)
-for (k, v) in counter_A.items():
-    ans -= v*(v-1)//2
-for i, a in enumerate(A):
-    if i < N-1 and a != A[i+1]:
-        s = i
-        e = i+1
-        tmp = 0
-        while 0 < s and e < N-1:
-            if A[s] != A[e]:
-                tmp += 1
-            ans += tmp
-            s -= 1
-            e += 1
-    if i < N-2 and a != A[i+2]:
-        s = i
-        e = i+2
-        tmp = 0
-        while 0 < s and e < N-1:
-            if A[s] != A[e]:
-                tmp += 1
-            ans += tmp
-            s -= 1
-            e += 1
+count = [0]*(N+1)
+for a in A:
+    count[a] += 1
+ans = 0
+for i in range((N+1)//2):
+    left = A[i]
+    right = A[~i]
+    ans += (N-2*i-count[left])*(i+1)
+    ans += (N-2*i-count[right])*(i+1)
+    if left != right:
+        ans -= i+1
+    count[left] -= 1
+    count[right] -= 1
+
 print(ans)
