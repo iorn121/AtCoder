@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from typing import Generic, Iterable, Iterator, TypeVar, Optional, List
 from array import array
 from bisect import bisect_left, bisect_right, insort
@@ -880,24 +881,40 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-N = I()
-aishou = [0]*(1 << 2*N)
-for i in range(2*N-1):
-    A = LI()
-    for j, a in enumerate(A, i+1):
-        aishou[1 << i | 1 << j] = a
+N, K = MI()
+s = S()
+X_cnt = s.count("X")
+if X_cnt == N:
+    exit(print(
+        max(K-1, 0)
+    ))
+if X_cnt == 0:
+    exit(print(max(0, N-1-K)))
 
+if X_cnt < K:
+    s = s.replace("X", "1").replace("Y", "X").replace("1", "Y")
+    K = N-K
+s_count = itertools.groupby(list(s))
+
+X_seq = []
 ans = 0
-candidate = [((1 << N*2)-1, 0)]
-while candidate:
-    members, score = candidate.pop()
-    if members == 0:
-        ans = max(ans, score)
-        continue
-    first_p = members & -members
-    rest = members ^ first_p
-    while rest:
-        second_p = rest & -rest
-        rest = rest ^ second_p
-        candidate.append((members ^ first_p ^ second_p, score ^ aishou[first_p | second_p]))
+for i, (k, v) in enumerate(s_count):
+    if i > 0 and k == "X":
+        X_seq.append(len(list(v)))
+    if k == "Y":
+        ans += len(list(v))-1
+if len(X_seq) > 0 and s[-1] == "X":
+    del X_seq[-1]
+
+# print(ans)
+X_seq.sort()
+# print(X_seq)
+for x in X_seq:
+    if x <= K:
+        ans += x+1
+        K -= x
+    else:
+        break
+if K > 0:
+    ans += K
 print(ans)

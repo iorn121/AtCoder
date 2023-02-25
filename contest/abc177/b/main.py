@@ -878,26 +878,3 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
-
-
-N = I()
-aishou = [0]*(1 << 2*N)
-for i in range(2*N-1):
-    A = LI()
-    for j, a in enumerate(A, i+1):
-        aishou[1 << i | 1 << j] = a
-
-ans = 0
-candidate = [((1 << N*2)-1, 0)]
-while candidate:
-    members, score = candidate.pop()
-    if members == 0:
-        ans = max(ans, score)
-        continue
-    first_p = members & -members
-    rest = members ^ first_p
-    while rest:
-        second_p = rest & -rest
-        rest = rest ^ second_p
-        candidate.append((members ^ first_p ^ second_p, score ^ aishou[first_p | second_p]))
-print(ans)
