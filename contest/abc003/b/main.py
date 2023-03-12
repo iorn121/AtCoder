@@ -878,24 +878,3 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
-
-
-N = I()
-A=S()[::-1]
-B=S()[::-1]
-big=0
-small=0
-
-ket=1
-for i in range(N):
-    l,r=int(A[i]),int(B[i])
-    if r>l:
-       l,r=r,l
-    big+=l*ket
-    small+=r*ket
-    big%=MOD
-    small%=MOD
-    ket*=10
-    ket%=MOD
-
-print((big*small)%MOD)

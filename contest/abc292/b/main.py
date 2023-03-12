@@ -880,22 +880,14 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-N = I()
-A=S()[::-1]
-B=S()[::-1]
-big=0
-small=0
-
-ket=1
-for i in range(N):
-    l,r=int(A[i]),int(B[i])
-    if r>l:
-       l,r=r,l
-    big+=l*ket
-    small+=r*ket
-    big%=MOD
-    small%=MOD
-    ket*=10
-    ket%=MOD
-
-print((big*small)%MOD)
+N, Q = MI()
+judge = [0]*N
+for _ in range(Q):
+    num, x = MI()
+    x -= 1
+    if num == 1:
+        judge[x] += 1
+    elif num == 2:
+        judge[x] += 2
+    else:
+        print("Yes" if judge[x] >= 2 else "No")

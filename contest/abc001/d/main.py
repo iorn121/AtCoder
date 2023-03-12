@@ -105,6 +105,17 @@ def modinv(a, mod=MOD):
     else:
         return x % mod
 
+def combination_modinv(n,r,mod=MOD):
+    if n<0 or r<0 or n<r:
+        return 0
+    fact=[1]*(n+2)
+    inv=[1]*(n+2)
+    fact_inv=[1]*(n+2)
+    for i in range(1,n+2):
+        fact[i]=(fact[i-1]*i)%mod
+        inv[i]=mod-inv[mod%i]*(mod//i)%mod
+        fact_inv[i]=fact_inv[i-1]*inv[i]%mod
+    return (fact[n]*fact_inv[r]%mod)*fact_inv[n-r]%mod
 
 class BIT:
     # 長さN+1の配列を初期化
@@ -880,22 +891,11 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-N = I()
-A=S()[::-1]
-B=S()[::-1]
-big=0
-small=0
-
-ket=1
-for i in range(N):
-    l,r=int(A[i]),int(B[i])
-    if r>l:
-       l,r=r,l
-    big+=l*ket
-    small+=r*ket
-    big%=MOD
-    small%=MOD
-    ket*=10
-    ket%=MOD
-
-print((big*small)%MOD)
+R,C=MI()
+X,Y=MI()
+D,L=MI()
+mod=10**9+7
+if D+L==X*Y:
+    ans=(R-X+1)*(C-X+1)%mod
+    ans=ans*combination_modinv(D+L,D)%mod
+    print(ans)

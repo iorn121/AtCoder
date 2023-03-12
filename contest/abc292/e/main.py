@@ -880,22 +880,57 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-N = I()
-A=S()[::-1]
-B=S()[::-1]
-big=0
-small=0
-
-ket=1
+N, M = MI()
+G = [[] for _ in range(N)]
+seen = set()
+can_start = set()
+cannot_start = set()
+check = [[False]*N for _ in range(N)]
 for i in range(N):
-    l,r=int(A[i]),int(B[i])
-    if r>l:
-       l,r=r,l
-    big+=l*ket
-    small+=r*ket
-    big%=MOD
-    small%=MOD
-    ket*=10
-    ket%=MOD
+    check[i][i] = True
+for _ in range(M):
+    u, v = MI()
+    u -= 1
+    v -= 1
+    check[u][v] = True
+    cannot_start.add(v)
+    if v in can_start:
+        can_start.remove(v)
+    if u not in cannot_start:
+        can_start.add(u)
+    G[u].append(v)
+ans = 0
+for start in can_start:
+    tour, in_time, out_time = EulerTour(N, G, start)
+    print(tour)
+    tour_set = set(tour)
+    tour_list = list(tour_set)
+    for i, t in enumerate(tour_list):
+        for j, tt in enumerate(tour_list):
+            if i == j or check[t][tt]:
+                continue
+            if in_time[t]+out_time[tt] < len(tour_list)*2-2:
+                ans += 1
+                check[t][tt] = True
+                print(t, tt)
+    seen |= tour_set
+    print(seen)
 
-print((big*small)%MOD)
+for i in range(N):
+    if i in seen:
+        continue
+    tour, in_time, out_time = EulerTour(N, G, i)
+    print(tour)
+    tour_set = set(tour)
+    tour_list = list(tour_set)
+    for i, t in enumerate(tour_list):
+        for j, tt in enumerate(tour_list):
+            if i == j or check[t][tt]:
+                continue
+            if in_time[t]+out_time[tt] < len(tour_list)*2-2:
+                ans += 1
+                check[t][tt] = True
+                print(t, tt)
+    seen |= tour_set
+    print(seen)
+print(ans)

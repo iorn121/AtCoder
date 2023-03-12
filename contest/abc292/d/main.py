@@ -880,22 +880,44 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-N = I()
-A=S()[::-1]
-B=S()[::-1]
-big=0
-small=0
-
-ket=1
+N, M = MI()
+edges = []
+G = [[] for _ in range(N)]
+for _ in range(M):
+    u, v = MI()
+    u -= 1
+    v -= 1
+    edges.append((u, v))
+    G[v].append(u)
+    G[u].append(v)
+seen = [-1]*N
+cnt = 0
+points = []
+flg = True
 for i in range(N):
-    l,r=int(A[i]),int(B[i])
-    if r>l:
-       l,r=r,l
-    big+=l*ket
-    small+=r*ket
-    big%=MOD
-    small%=MOD
-    ket*=10
-    ket%=MOD
-
-print((big*small)%MOD)
+    if seen[i] != -1:
+        continue
+    point = 1
+    q = collections.deque()
+    q.append(i)
+    seen[i] = cnt
+    while q:
+        now = q.pop()
+        for nxt in G[now]:
+            if now != nxt:
+                if seen[nxt] != -1:
+                    continue
+                point += 1
+                seen[nxt] = cnt
+                q.append(nxt)
+    cnt += 1
+    points.append(point)
+es = [0]*cnt
+for u, v in edges:
+    es[seen[u]] += 1
+# print(points)
+# print(es)
+for p, e in zip(points, es):
+    if p != e:
+        flg = False
+print("Yes" if flg else "No")

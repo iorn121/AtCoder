@@ -880,22 +880,25 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
+def prime_combination(n: int):
+    is_prime = [2] * (n + 1)
+    is_prime[0], is_prime[1] = 0, 1
+    m = int(math.sqrt(n))
+    for i in range(2, m + 1):
+        for j in range(2 * i, n + 1, i):
+            is_prime[j] += 1
+            if j//i > m:
+                is_prime[j] += 1
+            # if j == N-1:
+            #     print(i, j, is_prime[j])
+    return is_prime
+
+
 N = I()
-A=S()[::-1]
-B=S()[::-1]
-big=0
-small=0
 
-ket=1
-for i in range(N):
-    l,r=int(A[i]),int(B[i])
-    if r>l:
-       l,r=r,l
-    big+=l*ket
-    small+=r*ket
-    big%=MOD
-    small%=MOD
-    ket*=10
-    ket%=MOD
-
-print((big*small)%MOD)
+seki = prime_combination(N)
+# print(seki[N-1])
+ans = 0
+for i in range(1, N):
+    ans += seki[i]*seki[N-i]
+print(ans)
