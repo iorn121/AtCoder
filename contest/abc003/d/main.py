@@ -902,5 +902,12 @@ if D+L == X*Y:
     ans = ans*combination_modinv(D+L, D, mod) % mod
     print(ans)
 else:
-    ans = (R-X+1)*(C-Y+1)%mod
-    pattern=combination_modinv(D+L, D, mod)-combination_modinv(D+L, D, mod)
+    ans = (R-X+1)*(C-Y+1) % mod
+    S = D+L
+    pattern = combination_modinv(X*Y, S, mod)-2*combination_modinv(X*(Y-1), S, mod)-2*combination_modinv((X-1)*Y, S, mod)+combination_modinv(X*(Y-2), S, mod) + \
+        combination_modinv((X-2)*Y, S, mod)+4*combination_modinv((X-1)*(Y-1), S, mod)-2 * \
+        combination_modinv((X-1)*(Y-2), S, mod)-2*combination_modinv((X-2)*(Y-1), S, mod)+combination_modinv((X-2)*(Y-2), S, mod)
+    pattern %= mod
+    ans = ans*pattern % mod
+    ans = ans*combination_modinv(S, D, mod) % mod
+    print(ans)
