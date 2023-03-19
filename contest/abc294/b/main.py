@@ -896,17 +896,12 @@ class SortedMultiset(Generic[T]):
 
 H, W = MI()
 A = [LI() for _ in range(H)]
-ans = 0
-for x in itertools.combinations(range(H+W-2), H-1):
-    x = set(x)
-    h, w = 0, 0
-    check = set([A[0][0]])
-    for i in range(H+W-2):
-        if i in x:
-            h += 1
+for a in A:
+    ans = []
+    for num in a:
+        if num == 0:
+            ans.append(".")
         else:
-            w += 1
-        check.add(A[h][w])
-    if len(check) == H+W-1:
-        ans += 1
-print(ans)
+            chara = chr(ord("A")+num-1)
+            ans.append(chara)
+    print("".join(ans))

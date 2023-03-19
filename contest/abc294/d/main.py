@@ -894,19 +894,20 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-H, W = MI()
-A = [LI() for _ in range(H)]
-ans = 0
-for x in itertools.combinations(range(H+W-2), H-1):
-    x = set(x)
-    h, w = 0, 0
-    check = set([A[0][0]])
-    for i in range(H+W-2):
-        if i in x:
-            h += 1
-        else:
-            w += 1
-        check.add(A[h][w])
-    if len(check) == H+W-1:
-        ans += 1
-print(ans)
+N, Q = MI()
+customer = SortedSet([i for i in range(1, N+1)])
+called = SortedSet()
+ans = []
+for _ in range(Q):
+    instruct = LI()
+    if instruct[0] == 1:
+        calling = customer.gt(-1)
+        customer.discard(calling)
+        called.add(calling)
+    elif instruct[0] == 3:
+        again = called.gt(-1)
+        ans.append(again)
+    else:
+        x = instruct[1]
+        called.discard(x)
+print(*ans, sep="\n")

@@ -894,19 +894,23 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-H, W = MI()
-A = [LI() for _ in range(H)]
+L, N1, N2 = MI()
+vl1 = [LI() for _ in range(N1)]
+vl2 = [LI() for _ in range(N2)]
+
 ans = 0
-for x in itertools.combinations(range(H+W-2), H-1):
-    x = set(x)
-    h, w = 0, 0
-    check = set([A[0][0]])
-    for i in range(H+W-2):
-        if i in x:
-            h += 1
-        else:
-            w += 1
-        check.add(A[h][w])
-    if len(check) == H+W-1:
-        ans += 1
+l = 0
+l1, l2 = 0, 0
+while l < L:
+    if l1 == 0:
+        n1, l1 = vl1.pop()
+    if l2 == 0:
+        n2, l2 = vl2.pop()
+    cnt = min(l1, l2)
+    if n1 == n2:
+        ans += cnt
+    l1 -= cnt
+    l2 -= cnt
+    l += cnt
+    # print("check", l, "n1", n1, "n2", n2, "ans", ans)
 print(ans)

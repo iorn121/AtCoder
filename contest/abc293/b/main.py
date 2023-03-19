@@ -892,3 +892,19 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
+
+
+N = I()
+A = LI()
+
+called = set()
+
+for i, a in enumerate(A):
+    if a == 0:
+        continue
+    called.add(a)
+    A[a-1] = 0
+# print(A)
+ans = list(set([i for i in range(1, N+1)])-called)
+print(len(ans))
+print(*ans)
