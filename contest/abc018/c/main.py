@@ -895,23 +895,27 @@ class SortedMultiset(Generic[T]):
 
 
 R, C, K = MI()
-field = [[False if s == "o" else True for s in S()] for _ in range(R)]
+field = [[False]+[False if s == "o" else True for s in S()]+[False] for _ in range(R)]
+field = [[False]*(C+2)]+field+[[False]*(C+2)]
+field = list(itertools.chain.from_iterable(field))
 dxy = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+
+
+def convert(r, c):
+    return (r+1)*(C+2)+c+1
+
+    # print(field)
 for _ in range(K-1):
-    ans = [f[:] for f in field]
+    f = field[:]
     for i in range(R):
         for j in range(C):
-            for dx, dy in dxy:
-                if not (0 <= i+dy < R):
-                    continue
-                if not (0 <= j+dx < C):
-                    continue
-                ans[i][j] |= field[i+dy][j+dx]
-    field = ans
+            f[convert(i, j)] = field[convert(i, j)] | field[convert(i-1, j)
+                                                            ] | field[convert(i, j-1)] | field[convert(i+1, j)] | field[convert(i, j+1)]
+    field = f
     # print(field)
 cnt = 0
 for i in range(K-1, R-K+1):
     for j in range(K-1, C-K+1):
-        if not field[i][j]:
+        if not field[convert(i, j)]:
             cnt += 1
 print(cnt)
