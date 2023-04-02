@@ -893,7 +893,35 @@ class SortedMultiset(Generic[T]):
             ans += len(a)
         return ans
 
-N=I()
-A=LI()
-B=LI()
 
+# 配列の転倒数を求める（o(NlogN)）
+def inversion_num(L: list):
+    max_N = max(L)
+    bit = BIT(max_N)
+    cnt = 0
+    for i, l in enumerate(L):
+        cnt += i-bit.sum(l)
+        bit.add(l, 1)
+    return cnt
+
+
+N = I()
+A = LI()
+B = LI()
+A_inversion = inversion_num(A)
+B_inversion = inversion_num(B)
+
+A.sort()
+B.sort()
+
+A_set = set(A)
+
+if A == B:
+    if len(A_set) < N:
+        print("Yes")
+    elif abs(A_inversion-B_inversion) % 2 == 0:
+        print("Yes")
+    else:
+        print("No")
+else:
+    print("No")
