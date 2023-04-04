@@ -907,6 +907,31 @@ def inversion_num(L: list):
 
 D, G = MI()
 num_bonus = [LI() for _ in range(D)]
-ans=INF
-for i in range(1<<D):
-    
+ans = 10**18
+for i in range(1 << D):
+    cnt = 0
+    score = 0
+    comp = set()
+    for j in range(D):
+        if 1 & (i >> j):
+            comp.add(j)
+            cnt += num_bonus[j][0]
+            score += num_bonus[j][1]
+            score += 100*(j+1)*num_bonus[j][0]
+    # print(comp)
+    if score >= G:
+        ans = min(ans, cnt)
+        continue
+    for k in range(D-1, -1, -1):
+        if k in comp:
+            continue
+        solve = min(num_bonus[k][0], math.ceil((G-score)/(100*(k+1))))
+        # print("solve", solve, 100*(k+1))
+        score += solve*100*(k+1)
+        cnt += solve
+        if score >= G:
+            ans = min(ans, cnt)
+            break
+    # print(score)
+    # print(cnt)
+print(ans)
