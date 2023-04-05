@@ -920,3 +920,22 @@ def inversion_num(L: list):
         cnt += i-bit.sum(l)
         bit.add(l, 1)
     return cnt
+
+
+N = I()
+A = LI()
+
+A.insert(0, 0)
+A.append(0)
+
+total = 0
+for i in range(N+1):
+    total += abs(A[i]-A[i+1])
+for i in range(1, N+1):
+    pre = A[i-1]
+    now = A[i]
+    nxt = A[i+1]
+    if pre <= now <= nxt:
+        print(total)
+    else:
+        print(total-(abs(pre-now)+abs(now-nxt)-abs(pre-nxt)))
