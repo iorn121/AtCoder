@@ -933,24 +933,3 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
-
-
-N = I()
-A = LI()
-MOD = 10**9+7
-A.sort(reverse=True)
-if N % 2 == 1:
-    array = [i for i in range(0, N, 2)]*2
-    array.sort(reverse=True)
-    array.pop()
-    if A == array:
-        print(pow(2, N//2, MOD))
-    else:
-        print(0)
-else:
-    array = [i for i in range(1, N, 2)]*2
-    array.sort(reverse=True)
-    if A == array:
-        print(pow(2, N//2, MOD))
-    else:
-        print(0)
