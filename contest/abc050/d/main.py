@@ -933,12 +933,3 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
-
-
-sx, sy, tx, ty = MI()
-move_x = tx-sx
-move_y = ty-sy
-
-ans = "U"*move_y+"R"*move_x+"D"*move_y+"L"*move_x
-ans += "L"+"U"*(move_y+1)+"R"*(move_x+1)+"D"+"R"+"D"*(move_y+1)+"L"*(move_x+1)+"U"
-print(ans)

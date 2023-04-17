@@ -935,10 +935,21 @@ def make_divisors(n):
     return lower_divisors + upper_divisors[::-1]
 
 
-sx, sy, tx, ty = MI()
-move_x = tx-sx
-move_y = ty-sy
-
-ans = "U"*move_y+"R"*move_x+"D"*move_y+"L"*move_x
-ans += "L"+"U"*(move_y+1)+"R"*(move_x+1)+"D"+"R"+"D"*(move_y+1)+"L"*(move_x+1)+"U"
-print(ans)
+N = I()
+A = LI()
+A.sort(reverse=True)
+if N % 2 == 1:
+    array = [i for i in range(0, N, 2)]*2
+    array.sort(reverse=True)
+    array.pop()
+    if A == array:
+        print(pow(2, N//2))
+    else:
+        print(0)
+else:
+    array = [i for i in range(1, N, 2)]*2
+    array.sort(reverse=True)
+    if A == array:
+        print(pow(2, N//2))
+    else:
+        print(0)
