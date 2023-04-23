@@ -935,41 +935,8 @@ def make_divisors(n):
     return lower_divisors + upper_divisors[::-1]
 
 
-def f(root, score):
-    bro, sis = 0, 0
-    mark = [0]*9
-    for i in range(9):
-        if i % 2 == 0:
-            mark[root[i]] = 1
-    score_check = [(0, 3), (1, 4), (2, 5), (3, 6), (4, 7), (5, 8), (0, 1), (1, 2), (3, 4), (4, 5), (6, 7), (7, 8)]
-    # print(mark)
-    for s, t in score_check:
-        if mark[s] == mark[t]:
-            bro += score[(s, t)]
-        else:
-            sis += score[(s, t)]
-    return bro, sis
-
-
 def main():
-    memo = set()
-    score = {}
-    total = math.prod([i for i in range(1, 10)])
-    candidates = [[] for _ in range(9)]
-    d = collections.defaultdict(list)
-    score[(0, 3)], score[(1, 4)], score[(2, 5)] = MI()
-    score[(3, 6)], score[(4, 7)], score[(5, 8)] = MI()
-    score[(0, 1)], score[(1, 2)] = MI()
-    score[(3, 4)], score[(4, 5)] = MI()
-    score[(6, 7)], score[(7, 8)] = MI()
-    for candidate in itertools.permutations([i for i in range(9)]):
-        t, a = f(candidate, score)
-        cnt = ""
-        for i in range(8):
-            cnt += str(candidate[i])
-            nxt = candidate[i+1]
-            d[cnt].append((t, nxt))
-    # print(d)
+    N = I()
 
 
 main()
