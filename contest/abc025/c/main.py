@@ -952,24 +952,46 @@ def f(root, score):
 
 
 def main():
-    memo = set()
-    score = {}
-    total = math.prod([i for i in range(1, 10)])
-    candidates = [[] for _ in range(9)]
-    d = collections.defaultdict(list)
-    score[(0, 3)], score[(1, 4)], score[(2, 5)] = MI()
-    score[(3, 6)], score[(4, 7)], score[(5, 8)] = MI()
-    score[(0, 1)], score[(1, 2)] = MI()
-    score[(3, 4)], score[(4, 5)] = MI()
-    score[(6, 7)], score[(7, 8)] = MI()
-    for candidate in itertools.permutations([i for i in range(9)]):
-        t, a = f(candidate, score)
-        cnt = ""
-        for i in range(8):
-            cnt += str(candidate[i])
-            nxt = candidate[i+1]
-            d[cnt].append((t, nxt))
-    # print(d)
+
+    b = [list(map(int, input().split())) for _ in range(2)]
+    c = [list(map(int, input().split())) for _ in range(3)]
+    s = sum(map(sum, b)) + sum(map(sum, c))
+    memo = {}
+
+    def calc(board):
+        res = 0
+        for i in range(3):
+            for j in range(3):
+                if i < 2 and board[i * 3 + j] == board[i * 3 + j + 3]:
+                    res += b[i][j]
+                if j < 2 and board[i * 3 + j] == board[i * 3 + j + 1]:
+                    res += c[i][j]
+
+        return res
+
+    def solve(board, is_black):
+        if board in memo:
+            return memo[board]
+
+        if 'n' not in board:
+            res = calc(board)
+            memo[board] = res
+            return res
+
+        res = float('-inf') if is_black else float('inf')
+        for i in range(9):
+            if board[i] is 'n':
+                nb = board[:i] + ('b' if is_black else 'w') + board[i + 1:]
+                val = solve(nb, not is_black)
+                res = max(res, val) if is_black else min(res, val)
+
+        memo[board] = res
+
+        return res
+
+    tmp = solve('n' * 9, True)
+    print(tmp)
+    print(s - tmp)
 
 
 main()
