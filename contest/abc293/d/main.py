@@ -892,3 +892,49 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
+
+
+N, M = MI()
+edges = [[] for _ in range(2*N)]
+for i in range(N):
+    edges[2*i].append(2*i+1)
+    edges[2*i+1].append(2*i)
+for _ in range(M):
+    A, B, C, D = input().split()
+    A = int(A)
+    C = int(C)
+    left = (A-1)*2
+    right = (C-1)*2
+    if B == "R":
+        left += 1
+    if D == "R":
+        right += 1
+    edges[left].append(right)
+    edges[right].append(left)
+points = [len(e) for e in edges]
+X, Y = 0, 0
+seen = set()
+for i in range(2*N):
+    if i in seen:
+        continue
+    streak = set()
+    q = collections.deque()
+    q.append(i)
+    streak.add(i)
+    while q:
+        now = q.popleft()
+        for nxt in edges[now]:
+            if nxt in streak:
+                continue
+            q.append(nxt)
+            streak.add(nxt)
+    seen |= streak
+    flg = True
+    for comp in streak:
+        if points[comp] == 1:
+            flg = False
+    if flg:
+        X += 1
+    else:
+        Y += 1
+print(X, Y)
