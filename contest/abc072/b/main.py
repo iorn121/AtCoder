@@ -936,7 +936,7 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    print(input()[::2])
 
 
 if __name__ == "__main__":
