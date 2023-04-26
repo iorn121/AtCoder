@@ -936,7 +936,7 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    print("Yes" if "AC" in input() else "No")
 
 
 if __name__ == "__main__":

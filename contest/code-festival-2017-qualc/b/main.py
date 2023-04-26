@@ -937,6 +937,9 @@ def make_divisors(n):
 
 def main():
     N = I()
+    A = LI()
+    ans = 3**N-math.prod([1 if a % 2 == 1 else 2 for a in A])
+    print(ans)
 
 
 if __name__ == "__main__":
