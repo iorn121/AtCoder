@@ -936,7 +936,30 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    N, M = MI()
+    AB = []
+    for _ in range(M):
+        A, B = MI()
+        AB.append((A, B))
+    K = I()
+    CD = []
+    ans = 0
+    for _ in range(K):
+        C, D = MI()
+        CD.append((C, D))
+    for i in range(1 << K):
+        select = set()
+        for j in range(K):
+            if (i >> j) & 1:
+                select.add(CD[j][1])
+            else:
+                select.add(CD[j][0])
+        points = 0
+        for A, B in AB:
+            if A in select and B in select:
+                points += 1
+        ans = max(ans, points)
+    print(ans)
 
 
 if __name__ == "__main__":
