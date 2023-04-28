@@ -937,14 +937,6 @@ def make_divisors(n):
 
 def main():
     N = I()
-    sum_a, sum_b = 0, 0
-    AB = []
-    for _ in range(N):
-        a, b = MI()
-        sum_a += a
-        sum_b += b
-    for _ in range(N):
-        c, d = MI()
 
 
 if __name__ == "__main__":

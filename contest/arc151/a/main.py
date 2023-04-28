@@ -937,14 +937,24 @@ def make_divisors(n):
 
 def main():
     N = I()
-    sum_a, sum_b = 0, 0
-    AB = []
-    for _ in range(N):
-        a, b = MI()
-        sum_a += a
-        sum_b += b
-    for _ in range(N):
-        c, d = MI()
+    a = S()
+    b = S()
+    res = ['0'] * N
+    ca, cb = a.count('1'), b.count('1')
+
+    if ca < cb:
+        a, b = b, a
+        ca, cb = cb, ca
+
+    if (ca - cb) & 1:
+        print(-1)
+        return
+    diff = ca - cb
+    for i in range(N - 1, -1, -1):
+        if diff and a[i] == '1' and b[i] == '0':
+            res[i] = '1'
+            diff -= 2
+    print("".join(res))
 
 
 if __name__ == "__main__":
