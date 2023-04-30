@@ -949,25 +949,34 @@ def sieve_eratosthenes(n):
 
 
 def main():
-    N = I()
-    primes = sieve_eratosthenes(10**12//(2**2*3))
-    n = len(primes)
-    with open("./primes.txt") as f:
-        f.write(primes)
-    ans = 0
-    # for i in range(160):
-    #     a = primes[i]
-    #     if a**5 > N:
-    #         break
-    #     for j in range(i+1, 161):
-    #         b = primes[j]
-    #         if a**2*b**3 > N:
-    #             break
-    #         y = bisect_left(primes, b)
-    #         print(n, y)
-    #         ans += n-y+1
+    N = int(input())
+    P = []
+    Q = []
+    H = [False] * (10 ** 6 + 1)
+    for i in range(2, 10 ** 6 + 1):
+        if H[i]:
+            continue
+        P.append(i)
+        Q.append(i * i)
+        for j in range(i, 10 ** 6 + 1, i):
+            H[j] = True
 
-    print(ans)
+    M = len(P)
+    res = 0
+    for a in range(M):
+        if P[a] * P[a] > N:
+            break
+        for b in range(a + 1, M):
+            t = P[a] * P[a] * P[b]
+            if t > N:
+                break
+            s = N // t
+            i = bisect_right(Q, s)
+            r = max(0, i - b - 1)
+            if r == 0:
+                break
+            res += r
+    print(res)
 
 
 if __name__ == "__main__":
