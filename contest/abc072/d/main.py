@@ -937,6 +937,21 @@ def make_divisors(n):
 
 def main():
     N = I()
+    A = LI()
+    A.append(N+2)
+    ans = 0
+    cnt = 0
+    for i, a in enumerate(A, 1):
+        if i == a:
+            cnt += 1
+        else:
+            if cnt == 1:
+                ans += 1
+                cnt = 0
+            elif cnt > 1:
+                ans += (cnt+1)//2
+                cnt = 0
+    print(ans)
 
 
 if __name__ == "__main__":
