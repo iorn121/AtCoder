@@ -920,3 +920,14 @@ def inversion_num(L: list):
         cnt += i-bit.sum(l)
         bit.add(l, 1)
     return cnt
+
+
+N, K = MI()
+if K == 0:
+    exit(print(N**2))
+ans = 0
+for b in range(K+1, N+1):
+    n = (N+1)//b
+    ans += (b-K)*n
+    ans += max(0, N-n*b-K+1)
+print(ans)
