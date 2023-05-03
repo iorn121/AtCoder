@@ -936,10 +936,37 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
-    AB = [tuple(MI()) for _ in range(N)]
-    CD = [tuple(MI()) for _ in range(N)]
-    print(AB)
+    N = S()
+    N_set = collections.defaultdict(int)
+    for n in N:
+        N_set[n] += 1
+    if len(N) == 1:
+        if N == "8":
+            print("Yes")
+        else:
+            print("No")
+    elif len(N) == 2:
+        check = set()
+        for x in range(16, 100, 8):
+            y = str(x)
+            check.add(y)
+            check.add(y[::-1])
+        if N in check:
+            print("Yes")
+        else:
+            print("No")
+    else:
+        for x in range(104, 1001, 8):
+            flg = True
+            n_set = N_set.copy()
+            for y in str(x):
+                n_set[y] -= 1
+                if n_set[y] < 0:
+                    flg = False
+            if flg:
+                print("Yes")
+                exit()
+        print("No")
 
 
 if __name__ == "__main__":
