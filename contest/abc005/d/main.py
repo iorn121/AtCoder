@@ -936,16 +936,57 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
-    AB = [tuple(MI()) for _ in range(N)]
-    CD = []
-    initC,initD=0,0
+    N = int(input())
+    inlis = []
+
+    for _ in range(N):
+        D = list(map(int, input().split()))
+        inlis.append(D)
+
+    Q = int(input())
+    plis = []
+
+    for _ in range(Q):
+        p = int(input())
+        plis.append(p)
+
+    atailis = []
     for i in range(N):
-        C,D=MI()
-        if i==0:
-            initC,initD=C,D
-            CD.append(0,0)
-    print(AB)
+        tmp = []
+        mae = 0
+        for j in range(N):
+            a = inlis[i][j]
+            mae += a
+            tmp.append(mae)
+        atailis.append(tmp)
+
+    atailis2 = [[0 for _ in range(N+1)]]
+    mae = [0] * (N+1)
+    tmp = [0]
+    for k in range(N):
+        for l in range(N):
+            a = atailis[k][l]
+            tmp.append(mae[l+1] + a)
+        atailis2.append(tmp)
+        mae = tmp
+        tmp = [0]
+
+    # print(atailis2)
+    sizelis = [0] * (N**2+1)
+
+    for x1 in range(N):
+        for x2 in range(x1+1, N+1):
+            for y1 in range(N):
+                for y2 in range(y1+1, N+1):
+                    area = (x2-x1) * (y2-y1)
+                    size = atailis2[y2][x2] - atailis2[y2][x1] - atailis2[y1][x2] + atailis2[y1][x1]
+                    sizelis[area] = max(sizelis[area], size)
+
+    for i in range(N**2):
+        sizelis[i+1] = max(sizelis[i+1], sizelis[i])
+
+    for num in plis:
+        print(sizelis[num])
 
 
 if __name__ == "__main__":

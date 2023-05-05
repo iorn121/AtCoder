@@ -937,15 +937,6 @@ def make_divisors(n):
 
 def main():
     N = I()
-    AB = [tuple(MI()) for _ in range(N)]
-    CD = []
-    initC,initD=0,0
-    for i in range(N):
-        C,D=MI()
-        if i==0:
-            initC,initD=C,D
-            CD.append(0,0)
-    print(AB)
 
 
 if __name__ == "__main__":
