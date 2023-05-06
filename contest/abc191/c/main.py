@@ -936,12 +936,24 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
-    ans = []
-    for i in range(1, 1 << N):
-        digit = len(bin(i & -i))-2
-        ans.append(digit)
-    print(*ans)
+    H, W = MI()
+    field = SS(H)
+    ans = 0
+
+    def check(h, w):
+        if field[h-1][w] == "#" and field[h+1][w] == "#":
+            return True
+        if field[h][w-1] == "#" and field[h][w+1] == "#":
+            return True
+        return False
+
+    for i in range(1, H-1):
+        for j in range(1, W-1):
+            if field[i][j] == "." and check(i, j):
+                ans += 1
+            if field[i][j] == "#" and not check(i, j):
+                ans += 1
+    print(ans)
 
 
 if __name__ == "__main__":

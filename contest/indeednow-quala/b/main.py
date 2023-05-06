@@ -937,11 +937,17 @@ def make_divisors(n):
 
 def main():
     N = I()
-    ans = []
-    for i in range(1, 1 << N):
-        digit = len(bin(i & -i))-2
-        ans.append(digit)
-    print(*ans)
+    ref = "indeednow"
+    mul_set = str(SortedMultiset(ref))
+    # print(mul_set)
+    for _ in range(N):
+        s = S()
+        s_set = str(SortedMultiset(s))
+        # print(s_set, mul_set)
+        if mul_set == s_set:
+            print("YES")
+        else:
+            print("NO")
 
 
 if __name__ == "__main__":

@@ -936,12 +936,10 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
-    ans = []
-    for i in range(1, 1 << N):
-        digit = len(bin(i & -i))-2
-        ans.append(digit)
-    print(*ans)
+    N, P = MI()
+    mod = 10**9+7
+    ans = (P-1)*pow(P-2, N-1, mod) % mod
+    print(ans)
 
 
 if __name__ == "__main__":
