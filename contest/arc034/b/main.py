@@ -960,29 +960,18 @@ def prime_list(N):
 
 def main():
     N = I()
-    digit = len(str(N))
     ans = []
-    for i in range(digit, 0, -1):
-        X = N
-        candidate = ""
-        for j in range(i-1, 0, -1):
-            num = 10**j+1
-            tmp = X//num
-            if tmp > 9:
-                continue
-            candidate += str(tmp)
-            X -= tmp*num
-            print(candidate, X)
-        if X == 0:
-            ans.append(int(candidate))
-        if int(candidate[-1]) > 0 and X % 2 == 1 and X < 9:
-            candidate = candidate[:-1]+str(int(candidate[-1])-1)+str((X+11)//2)
-            ans.append(int(candidate))
-    print(len(ans))
-    if len(ans) == 0:
-        exit()
+    for i in range(1, 9*17+1):
+        if i > N:
+            break
+        fx = i
+        x = N-fx
+        if sum(map(int, list(str(x)))) == fx:
+            ans.append(x)
     ans.sort()
-    print(*ans, sep="\n")
+    print(len(ans))
+    if ans:
+        print(*ans, sep="\n")
 
 
 if __name__ == "__main__":
