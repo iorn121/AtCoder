@@ -933,3 +933,9 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+
+# a,b,c=MI()
+A = LI()
+A_set = set(A)
+print(len(A_set))
