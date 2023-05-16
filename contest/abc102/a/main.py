@@ -903,3 +903,7 @@ def inversion_num(L: list):
         cnt += i-bit.sum(l)
         bit.add(l, 1)
     return cnt
+
+
+N = I()
+print(N if N % 2 == 0 else N*2)
