@@ -960,6 +960,30 @@ def prime_list(N):
 
 def main():
     N,M=MI()
+    G=[[] for _ in range(N+M)]
+    for i in range(N):
+        A=I()
+        S=LI()
+        for s in S:
+            s-=1
+            G[i].append(N+s)
+            G[N+s].append(i)
+    q=collections.deque()
+    q.append(N)
+    root=[-1]*(N+M)
+    root[N]=0
+    while q:
+        now=q.popleft()
+        if now==N+M-1:
+            break
+        for nxt in G[now]:
+            if root[nxt]!=-1:
+                continue
+            root[nxt]=root[now]+1
+            q.append(nxt)
+    # print(root)
+    print(root[N+M-1]//2-1 if root[N+M-1]!=-1 else -1)
+
 
 if __name__ == "__main__":
     main()
