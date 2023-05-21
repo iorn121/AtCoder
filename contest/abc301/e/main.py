@@ -19,6 +19,7 @@ def LII(H): return [list(map(int, sys.stdin.readline().rstrip().split())) for _ 
 def S(): return sys.stdin.readline().rstrip()
 def SS(H): return [S() for _ in range(H)]
 def LS(): return list(sys.stdin.readline().rstrip().split())
+def SLS(H): return [list(S()) for _ in range(H)]
 def ARRAY(L): return array("i", L)
 
 
@@ -960,92 +961,71 @@ def prime_list(N):
 
 def main():
     H, W, T = MI()
-    field = SS(H)
-    candy = []
-
-    def convert(ii, jj):
-        return ii*W+jj
-
-    def restore(N):
-        return N//W, N % W
+    field = SLS(H)
+    # print(field)
+    points = []
     for i in range(H):
         for j in range(W):
             if field[i][j] == "S":
-                si, sj = i, j
+                start = len(points)
+                field[i][j] = str(start)
+                points.append(i*W+j)
             if field[i][j] == "G":
-                gi, gj = i, j
+                goal = len(points)
+                field[i][j] = str(goal)
+                points.append(i*W+j)
             if field[i][j] == "o":
-                candy.append(convert(i, j))
-    # print(si, sj)
-    # print(gi, gj)
-    # print(candy)
+                field[i][j] = str(len(points))
+                points.append(i*W+j)
 
-    prev = [-1]*(H*W)
-    seen = set()
-    q = collections.deque()
-    max_candy = [0]*(H*W)
+    N = len(points)
+    G = [10**12]*N**2
     dxy = [[0, 1], [1, 0], [-1, 0], [0, -1]]
-    s_c = convert(si, sj)
-    g_c = convert(gi, gj)
-    q.append(s_c)
-    seen.add(s_c)
-    prev[s_c] = -2
-    while q:
-        now = q.popleft()
-        for dy, dx in dxy:
-            ci, cj = restore(now)
-            nxt_i, nxt_j = ci+dy, cj+dx
-            nxt = convert(nxt_i, nxt_j)
-            # print(nxt, nxt_i, nxt_j)
-            if not (0 <= nxt_i < H and 0 <= nxt_j < W):
-                continue
-            if nxt in seen:
-                continue
-            if field[nxt_i][nxt_j] == "#":
-                continue
-            prev[nxt] = now
-            q.append(nxt)
-            seen.add(nxt)
-            if field[nxt_i][nxt_j] == "o":
-                max_candy[nxt] = max(max_candy[now]+1, max_candy[nxt])
-            else:
-                max_candy[nxt] = max(max_candy[now], max_candy[nxt])
-
-    # print(max_candy)
-
-    root = set()
-    ans = 0
-    start = g_c
-    while start != s_c:
-        root.add(start)
-        start = prev[start]
-        if start in candy:
-            ans = max(ans, max_candy[start])
-    root.add(s_c)
-    # print(root)
-    # print(ans)
-    option = []
-    for c in candy:
-        if c in root:
-            continue
-        ci, cj = restore(c)
+    for i in range(N):
+        first = points[i]
+        dist = [-1]*(H*W)
+        fi, fj = first//W, first % W
+        dist[fi*W+fj] = 0
         q = collections.deque()
-        q.append((0, ci, cj))
-        seeen = set()
-        seeen.add((ci, cj))
+        q.append(first)
+        # print("--", ni, nj)
         while q:
-            p, cii, cjj = q.popleft()
-            if convert(cii, cjj) in root:
-                option.append(p)
+            now = q.popleft()
+            ni, nj = now//W, now % W
             for dy, dx in dxy:
-                ni, nj = cii+dy, cjj+dx
-                if not (0 <= ni < H and 0 <= nj < W):
+                xi, xj = ni+dy, nj+dx
+                x = xi*W+xj
+                if not (0 <= xi < H and 0 <= xj < W):
                     continue
-                if field[ni][nj] == "#":
+                if dist[xi*W+xj] != -1:
                     continue
-                if (ni, nj) in seeen:
+                if field[xi][xj] == "#":
                     continue
-                q.append((p+1, ni, nj))
+                if field[xi][xj] != ".":
+                    G[i*N+int(field[xi][xj])] = dist[ni*W+nj]+1
+                q.append(x)
+                dist[xi*W+xj] = dist[ni*W+nj]+1
+                # print(xi, xj)
+    # print(points)
+    # print(start, goal)
+    # print(G)
+
+    dp = [[10**12]*N for _ in range(1 << N)]
+    dp[1 << start][start] = 0
+    for state in range(1 << N):
+        for now in range(N):
+            if dp[state][now] == 10**12:
+                continue
+            for nxt in range(N):
+                nxt_state = state | (1 << nxt)
+                dp[nxt_state][nxt] = min(dp[nxt_state][nxt], dp[state][now]+G[now*N+nxt])
+                # print(nxt_state, now, nxt, dp[state][now]+G[now][nxt])
+    # print(dp)
+    ans = -1
+    for state in range(1 << N):
+        if dp[state][goal] <= T:
+            ans = max(ans, bin(state).count("1")-2)
+    print(ans)
 
 
 if __name__ == "__main__":
