@@ -936,46 +936,23 @@ def make_divisors(n):
 
 
 N, A, B, P, Q = MI()
-Pa = [-1]*101
-tmp = [0]*101
-tmp[A] = 1
-s, e = A, A+1
-for turn in range(1, N-A+2):
-    ntmp = [0]*101
-    for i in range(s, e):
-        for j in range(1, P+1):
-            if i+j > 100:
-                continue
-            ntmp[i+j] += tmp[i]
-    tmp = ntmp[:]
-    if tmp[N] > 0:
-        Pa[turn] = pow(P, turn, MOD)*tmp[N] % MOD
-    s = s+1
-    e = e+3
-Pb = [-1]*100
-tmp = [0]*101
-tmp[B] = 1
-s, e = B, B+1
-for turn in range(1, N-B+2):
-    ntmp = [0]*101
-    for i in range(s, e):
-        for j in range(1, Q+1):
-            if i+j > 100:
-                continue
-            ntmp[i+j] += tmp[i]
-    tmp = ntmp[:]
-    if tmp[N] > 0:
-        Pb[turn] = pow(Q, turn, MOD)*tmp[N]*-1 % MOD
-    s = s+1
-    e = e+3
-ans = 0
-for i in range(1, 101):
-    if Pa[i] == -1:
-        continue
-    tmp = Pa[i]
-    if Pb[i-1] != -1:
-        tmp = tmp*Pb[i-1] % MOD
-    ans += tmp
-    ans %= MOD
+invP = modinv(P, MOD)
+invQ = modinv(Q, MOD)
+dp = [[[0]*2 for _ in range(N+1)] for _ in range(N+1)]
+for i in range(N):
+    for j in range(2):
+        dp[i][N][j] = 0
+        dp[N][i][j] = 1
 
-print(ans)
+for i in range(N-1, -1, -1):
+    for j in range(N-1, -1, -1):
+        for k in range(1, P+1):
+            dp[i][j][0] += dp[min(i+k, N)][j][1]
+        dp[i][j][0] *= invP
+        dp[i][j][0] %= MOD
+        for l in range(1, Q+1):
+            dp[i][j][1] += dp[i][min(j+l, N)][0]
+        dp[i][j][1] *= invQ
+        dp[i][j][1] %= MOD
+
+print(dp[A][B][0])
