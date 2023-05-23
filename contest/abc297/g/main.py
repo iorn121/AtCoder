@@ -937,16 +937,7 @@ def make_divisors(n):
 
 N, L, R = MI()
 A = LI()
-
-sum_LR = L+R
-
-check = 0
-cheat = 0
+ans = 0
 for a in A:
-
-    if L <= a < sum_LR:
-        check += 1
-
-    if 2*L <= a <= 2*R:
-        cheat += 1
-print("First" if check % 2 == 1 or (cheat+check) % 2 == 1 else "Second")
+    ans ^= a % (L+R)//L
+print("First" if ans else "Second")
