@@ -1031,14 +1031,18 @@ class ModInt:
 
 def main():
     N, M = MI()
-    candidates = []
+    ans = -1
+    k = 0
     for i in range(1, 10):
-        for j in range(1, N+1):
-            candidate = int(str(i)*j)
-            if candidate % M == 0:
-                candidates.append(candidate)
-    candidates.sort()
-    print(candidates[-1] if candidates else -1)
+        candidate = 0
+        for j in range(N):
+            candidate *= 10
+            candidate += i
+            candidate %= M
+            if candidate == 0 and j >= k:
+                k = j
+                ans = str(i)*(j+1)
+    print(ans)
 
 
 if __name__ == "__main__":
