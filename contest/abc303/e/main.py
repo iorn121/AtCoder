@@ -1031,10 +1031,28 @@ class ModInt:
 
 def main():
     N = I()
-    for _ in range(N):
-        u,v=MI()
-        
+    G = [[] for _ in range(N)]
+    for _ in range(N-1):
+        u, v = MI()
+        u -= 1
+        v -= 1
+        G[u].append(v)
+        G[v].append(u)
+    ans = []
+    root = [len(g) for g in G]
+    total = sum(root)//2
+    # print(total)
+    root.sort(reverse=True)
+    for start, star in enumerate(root):
+        if star <= 2:
+            continue
+        ans.append(star)
+        total -= star+1
 
+    # print(total, ans)
+    ans.extend([2]*((total+1)//3))
+    ans.sort()
+    print(*ans)
 
 
 if __name__ == "__main__":
