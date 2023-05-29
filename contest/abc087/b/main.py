@@ -903,3 +903,19 @@ def inversion_num(L: list):
         cnt += i-bit.sum(l)
         bit.add(l, 1)
     return cnt
+
+
+A = I()
+B = I()
+C = I()
+X = I()
+# あなたは、500 円玉を A 枚、100 円玉を B 枚、50 円玉を C 枚持っています。 これらの硬貨の中から何枚かを選び、合計金額をちょうど X 円にする方法は何通りあるか、求めてください。
+# ただし、同じ種類の硬貨どうしは区別できません。2 通りの硬貨の選び方は、ある種類の硬貨についてその硬貨を選ぶ枚数が異なるとき区別されます。
+
+ans = 0
+for a in range(A+1):
+    for b in range(B+1):
+        for c in range(C+1):
+            if 500*a+100*b+50*c == X:
+                ans += 1
+print(ans)
