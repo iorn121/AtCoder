@@ -892,3 +892,11 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
+
+
+S = input()
+N = I()
+for _ in range(N):
+    l, r = MI()
+    S = S[:l-1]+S[l-1:r][::-1]+S[r:]
+print(S)
