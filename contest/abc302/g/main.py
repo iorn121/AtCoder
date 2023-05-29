@@ -959,8 +959,27 @@ def prime_list(N):
 
 
 def main():
-    N=I()
+    N = I()
+    A = LI()
+    sortedA = sorted(A)
 
+    matrix = [[0 for _ in range(4)] for _ in range(4)]
+    for val, sorted_val in zip(A, sortedA):
+        matrix[val - 1][sorted_val - 1] += 1
+
+    # length 2/3/4 cycles
+    cnt = 0
+    for cycle_len in [2, 3, 4]:
+        for nodes in itertools.permutations(range(4), cycle_len):
+            min_val = matrix[nodes[cycle_len - 1]][nodes[0]]
+            for node_idx in range(cycle_len - 1):
+                min_val = min(min_val, matrix[nodes[node_idx]][nodes[node_idx + 1]])
+            cnt += min_val * (cycle_len - 1)
+            for node_idx in range(cycle_len - 1):
+                matrix[nodes[node_idx]][nodes[node_idx + 1]] -= min_val
+            matrix[nodes[cycle_len - 1]][nodes[0]] -= min_val
+
+    print(cnt)
 
 
 if __name__ == "__main__":
