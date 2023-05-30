@@ -15,7 +15,7 @@ def I(): return int(sys.stdin.readline().rstrip())
 def MI(): return map(int, sys.stdin.readline().rstrip().split())
 def LI(): return list(map(int, sys.stdin.readline().rstrip().split()))
 def LII(H): return [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(H)]
-def S(): return sys.stdin.readline().rstrip()
+def ST(): return sys.stdin.readline().rstrip()
 def SS(H): return [S() for _ in range(H)]
 def LS(): return list(sys.stdin.readline().rstrip().split())
 def ARRAY(L): return array("i", L)
@@ -936,7 +936,30 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+
+    def count_x(last, length, rwl):
+        rtn = last//length*rwl[-1]
+        rtn += rwl[last % length]
+        return rtn
+
+    N, M, K = MI()
+    S = ST()
+    rw = [1 if s == "x" else 0 for s in S]
+    rw = [0]+rw
+    rw = list(itertools.accumulate(rw))
+    # print(rw)
+    ans = 0
+    for i in range(1, N+1):
+        minus_cnt = count_x(i-1, N, rw)
+        l, r = i-1, N*M+1
+        while r-l > 1:
+            mid = (l+r)//2
+            if count_x(mid, N, rw)-minus_cnt <= K:
+                l = mid
+            else:
+                r = mid
+        ans = max(ans, l-i+1)
+    print(ans)
 
 
 if __name__ == "__main__":
