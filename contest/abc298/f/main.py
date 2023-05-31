@@ -933,3 +933,34 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+
+N = I()
+R = collections.defaultdict(int)
+C = collections.defaultdict(int)
+RC = collections.defaultdict(int)
+
+for _ in range(N):
+    r, c, x = MI()
+    R[r] += x
+    C[c] += x
+    RC[r, c] += x
+ans = 0
+# print(R)
+# print(C)
+# print(RC)
+for (r, c), s in RC.items():
+    ans = max(ans, R[r]+C[c]-s)
+
+csum = [(c, s) for c, s in C.items()]
+csum.sort(key=lambda x: x[1], reverse=True)
+
+for r, s in R.items():
+    for c, t in csum:
+        # print(r, s, c, t)
+        if (r, c) in RC:
+            continue
+        ans = max(ans, s+t)
+        break
+
+print(ans)
