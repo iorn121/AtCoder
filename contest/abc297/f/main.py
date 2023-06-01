@@ -935,4 +935,32 @@ def make_divisors(n):
     return lower_divisors + upper_divisors[::-1]
 
 
-H,W,K=MI()
+H, W, K = MI()
+N = H * W
+fact = [1] * (N + 1)
+inv = [1] * (N + 1)
+fact_inv = [1] * (N + 1)
+
+for i in range(2, N + 1):
+    fact[i] = i * fact[i - 1] % MOD
+    inv[i] = - (MOD // i) * inv[MOD % i] % MOD
+    fact_inv[i] = fact_inv[i - 1] * inv[i] % MOD
+
+cmb = [0] * (N + 1)
+
+for i in range(K, N + 1):
+    cmb[i] = fact[i] * fact_inv[K] % MOD * fact_inv[i - K] % MOD
+
+ans = N * cmb[N] % MOD
+
+for x in range(W):
+    for y in range(H):
+        curr = cmb[x * H] + cmb[(W - 1 - x) * H] + cmb[y * W] + cmb[(H - 1 - y) * W]
+        curr %= MOD
+        curr -= cmb[x * y] + cmb[(W - 1 - x) * y] + cmb[x * (H - 1 - y)] + cmb[(W - 1 - x) * (H - 1 - y)]
+        curr %= MOD
+        ans -= curr
+        ans %= MOD
+
+ans = ans * pow(cmb[N], MOD - 2, MOD) % MOD
+print(ans)
