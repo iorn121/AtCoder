@@ -894,36 +894,81 @@ class SortedMultiset(Generic[T]):
         return ans
 
 
-N, M, K = MI()
-takahashi = [tuple(MI()) for _ in range(N)]
-aoki = [tuple(MI()) for _ in range(M)]
+def binary_search(ok, ng, error, test):
+    """
+    :param ok: solve(x) = True を必ず満たす点
+    :param ng: solve(x) = False を必ず満たす点
+    """
+    while abs(ok-ng) > error:
+        mid = (ok+ng)/2
+        if test(mid):
+            ok = mid
+        else:
+            ng = mid
+    return ok
 
-t_nodo = [(a/(a+b)*100, a, b) for i, (a, b) in enumerate(takahashi)]
-t_nodo.sort()
-a_nodo = [(a/(a+b)*100, a, b) for i, (a, b) in enumerate(aoki)]
-a_nodo.sort()
-area = 0
-cnt = N+M-1
-while cnt < K and area < min(N, M)-1:
-    area += 1
-    K -= cnt
-    cnt -= 2
-# print(area, K)
+##############################################################
 
-n_max = N-1-area
-m_max = M-1-area
-_, t_x, t_y = t_nodo[n_max]
-_, a_x, a_y = a_nodo[m_max]
-# print(t_nodo)
-# print(n_max)
-# print(a_nodo)
-# print(m_max)
-# print(K)
-candidates = []
-for _, x, y in t_nodo[:n_max+1]:
-    candidates.append((x+a_x)/(x+y+a_x+a_y)*100)
-for _, x, y in a_nodo[:m_max]:
-    candidates.append((x+t_x)/(x+y+t_x+t_y)*100)
-candidates.sort()
-# print(candidates)
-print(candidates[-K])
+
+input = sys.stdin.readline
+
+
+def example():
+    global input
+    example = iter(
+        """
+4 5 10
+5 4
+1 6
+7 4
+9 8
+2 2
+5 6
+6 7
+5 3
+8 1
+
+
+        """
+        .strip().split("\n"))
+
+    def input(): return next(example)
+
+# example()
+
+
+N, M, K = map(int, input().split())
+A = []
+for _ in range(N):
+    a, b = map(int, input().split())
+    A.append((a, b))
+B = []
+for _ in range(M):
+    a, b = map(int, input().split())
+    B.append((a, b))
+
+
+def test(x):
+    AA = []
+    for i in range(N):
+        a, b = A[i]
+        AA.append(a*100-(a+b)*x)
+    AA.sort(reverse=True)
+
+    BB = []
+    for i in range(M):
+        a, b = B[i]
+        BB.append(a*100-(a+b)*x)
+    BB.sort(reverse=True)
+
+    r = M-1
+    res = 0
+    for l in range(N):
+        a = AA[l]
+        while r >= 0 and a+BB[r] < 0:
+            r -= 1
+        res += (r+1)
+    return res >= K
+
+
+print(binary_search(0, 100, 10**-9, test))
