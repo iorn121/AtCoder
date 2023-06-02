@@ -878,3 +878,18 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
+
+
+N, M = MI()
+uf = UnionFind(N)
+for _ in range(M):
+    a, b = MI()
+    a -= 1
+    b -= 1
+    uf.union(a, b)
+ans = 0
+groups = uf.all_group_members()
+# print(groups)
+for x, group in groups.items():
+    ans = max(ans, len(group))
+print(ans)
