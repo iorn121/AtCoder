@@ -937,6 +937,17 @@ def make_divisors(n):
 
 def main():
     N = I()
+    if N == 1:
+        exit(print(2))
+    N = N//(N & -N)
+    sqrt = int(math.sqrt(N))
+    # print(sqrt)
+    factor = set()
+    for i in range(1, sqrt+1):
+        if N % i == 0:
+            factor.add(i)
+            factor.add(N//i)
+    print(len(factor)*2)
 
 
 if __name__ == "__main__":
