@@ -1336,7 +1336,8 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N, A, B = MI()
+    print("Alice" if (A-B) % 2 == 0 else "Borys")
 
 
 if __name__ == "__main__":
