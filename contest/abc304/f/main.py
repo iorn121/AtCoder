@@ -959,39 +959,66 @@ def prime_list(N):
 
 
 def main():
-    N=I()
-    S=ST()
-    must=[]
-    for i,s in enumerate(S,1):
-        if s==".":
-            must.append(i)
-    factors=make_divisors(N)
-    factors=factors[::-1]
-    interval=set()
-    ans=0
-    for f in factors:
-        if f==N:
-            continue
-        # print(f)
-        f_interval=set()
-        for m in must:
-            nm=m%f
-            if nm==0:
-                nm=f
-            gcd=math.gcd(nm,f)
-            gf=f//gcd
-            gnm=nm//gcd
-            f_interval.add((gnm,gf))
-        # print(f_interval)
-        if not f_interval<=interval:
-            interval|=f_interval
-            tmp_cnt=1
-            for i in range(1,f+1):
-                g=math.gcd(i,f)
-                if not (i//g,f//g) in interval:
-                    # print(i//g,f//g)
-                    tmp_cnt*=2
-            ans+=tmp_cnt
+    # include <iostream>
+    # include <vector>
+    # include <atcoder/all>
+    # using namespace std;
+    # using namespace atcoder;
+    # using mint = static_modint<998244353>;
+
+    # int main() {
+    # 	int n;
+    # 	cin >> n;
+    # 	string s;
+    # 	cin >> s;
+    # 	vector<mint> p2(n + 1);
+    # 	p2[0] = 1;
+    # 	for (int i = 0; i < n; i++) p2[i + 1] = p2[i] * 2;
+    # 	vector<mint> a(n), m(n);
+    # 	for (int t = 1; t < n; t++) {
+    # 		if (n % t == 0) {
+    # 			vector<bool> v(t, true);
+    # 			for (int i = 0; i < n; i++) if (s[i] == '.') v[i % t] = false;
+    # 			int cnt = 0;
+    # 			for (int i = 0; i < t; i++) if (v[i]) cnt++;
+    # 			a[t] = p2[cnt];
+    # 			m[t] = a[t];
+    # 			for (int i = 1; i < t; i++) if (t % i == 0) m[t] -= m[i];
+    # 		}
+    # 	}
+    # 	mint ans = 0;
+    # 	for (int i = 1; i < n; i++) ans += m[i];
+    # 	cout << ans.val() << '\n';
+    # }
+    # 上記のC++のプログラムをPythonに変換
+    n = int(input())
+    s = input()
+    p2 = [1] * (n + 1)
+    for i in range(n):
+        p2[i + 1] = p2[i] * 2
+        p2[i + 1] %= MOD
+    a = [0] * n
+    m = [0] * n
+    for t in range(1, n):
+        if n % t == 0:
+            v = [True] * t
+            for i in range(n):
+                if s[i] == '.':
+                    v[i % t] = False
+            cnt = 0
+            for i in range(t):
+                if v[i]:
+                    cnt += 1
+            a[t] = p2[cnt]
+            m[t] = a[t]
+            for i in range(1, t):
+                if t % i == 0:
+                    m[t] -= m[i]
+                    m[t] %= MOD
+    ans = 0
+    for i in range(1, n):
+        ans += m[i]
+        ans %= MOD
     print(ans)
 
 
