@@ -11,7 +11,6 @@ from decimal import Decimal
 import math
 import string
 import sys
-import numpy as np
 sys.setrecursionlimit(10**6)
 def I(): return int(sys.stdin.readline().rstrip())
 def MI(): return map(int, sys.stdin.readline().rstrip().split())
@@ -1337,7 +1336,27 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N, M = MI()
+    seen = set()
+    seen.add(1)
+    root = [1]
+
+    while True:
+
+        num, *A = MI()
+        if N in A:
+            print(N, flush=True)
+            ok = ST()
+            exit()
+        for a in A:
+            if a not in seen:
+                seen.add(a)
+                root.append(a)
+                print(a, flush=True)
+                break
+        else:
+            root.pop()
+            print(root[-1], flush=True)
 
 
 if __name__ == "__main__":
