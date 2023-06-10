@@ -1336,7 +1336,19 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    T = I()
+    candidates = []
+    for i in range(58):
+        for j in range(i+1, 59):
+            for k in range(j+1, 60):
+                candidate = (1 << i) | (1 << j) | (1 << k)
+                candidates.append(candidate)
+    candidates.sort()
+    # print(candidates)
+    for _ in range(T):
+        N = I()
+        Ni = bisect_right(candidates, N)
+        print(candidates[Ni-1] if Ni > 0 else -1)
 
 
 if __name__ == "__main__":

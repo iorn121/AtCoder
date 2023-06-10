@@ -1337,6 +1337,18 @@ class mf_graph:
 
 def main():
     N = I()
+    A = LI()
+    A.sort()
+    small = A[:N//2+1]
+    big = A[N//2+1:]
+    # print(small)
+    # print(big)
+    flg = True
+    for x, y, a in zip(small[:-1], small[1:], big):
+        # print(x, y, a)
+        if not (x < a and y < a):
+            flg = False
+    print("Yes" if flg else "No")
 
 
 if __name__ == "__main__":
