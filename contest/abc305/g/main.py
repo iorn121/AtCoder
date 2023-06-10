@@ -1337,7 +1337,93 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    def tins(s, t, L, l):
+        mask = (1 << l)-1
+        for _ in range(L-l+1):
+            if (s & mask) == t:
+                return True
+            s >>= 1
+        return False
+
+    def dot(aa, bb):
+        h = len(aa)
+        w = len(bb[0])
+        res = [[0]*w for _ in range(h)]
+        for j, col in enumerate(zip(*bb)):
+            for i in range(h):
+                v = 0
+                # for a, b in zip(row, col): v += a*b
+                # res[i][j] = v
+                for a, b in zip(aa[i], col):
+                    v += a*b % MOD
+                res[i][j] = v % MOD
+        return res
+
+    def matpow(mat, e):
+        n = len(mat)
+        res = [[1 if i == j else 0 for j in range(n)] for i in range(n)]
+        while e:
+            if e & 1:
+                res = dot(res, mat)
+            mat = dot(mat, mat)
+            e >>= 1
+        return res
+
+    n, m = LI()
+    ng = []
+    ll = []
+    mt = str.maketrans("ab", "01")
+    for _ in range(m):
+        s = ST()
+        ll.append(len(s))
+        ng.append(int(s.translate(mt), 2))
+    # print(ll)
+    # print(ng)
+
+    if n < 10:
+        ans = 0
+        for s in range(1 << n):
+            for l, t in zip(ll, ng):
+                if tins(s, t, n, l):
+                    break
+            else:
+                ans += 1
+        print(ans)
+        exit()
+
+    def ok(s, d):
+        s = s*2+d
+        for l, t in zip(ll, ng):
+            if s & ((1 << l)-1) == t:
+                return False
+        return True
+
+    to = [[0]*32 for _ in range(32)]
+    for s in range(32):
+        for d in range(2):
+            if ok(s, d):
+                to[s][(s*2+d) & 31] = 1
+    # p2D(to)
+
+    to = matpow(to, n-5)
+    aa = [0]*32
+    for s in range(32):
+        for l, t in zip(ll, ng):
+            if tins(s, t, 5, l):
+                break
+        else:
+            aa[s] = 1
+
+    aa = dot([aa], to)
+    ans = 0
+    for a in aa[0]:
+        ans += a
+        ans %= MOD
+    print(ans)
+    # このmainプログラムの意味を説明してください
+    # 1. n<10のとき、全探索で解く
+    # 2. n>=10のとき、遷移を行列として扱い、行列累乗で解く
+    # 3. 1と2を統一的に扱うために、n<10のとき、n=10のとき、n=11のとき、n>=12のときの4パターンを同じ方法で解く
 
 
 if __name__ == "__main__":
