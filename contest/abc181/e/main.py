@@ -936,7 +936,33 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    INF = (1 << 63)-1
+    N, M = MI()
+    H = LI()
+    H.sort()
+    W = LI()
+    even = [0]
+    odd = [0]
+    for a, b in zip(H[::2], H[1::2]):
+        even.append(abs(a-b))
+    for a, b in zip(H[N-1::-2], H[N-2::-2]):
+        odd.append(abs(a-b))
+    even = list(itertools.accumulate(even))
+    odd = list(itertools.accumulate(odd))
+    # print(*even)
+    # print(*odd)
+    ans = INF
+    for w in W:
+        index = bisect_right(H, w)
+        # print("----------------------")
+        # print(index)
+        # print(even[index//2], odd[(N-index)//2])
+        tmp = even[index//2]+odd[(N-index)//2]
+        index = index//2*2
+        # print(H[index])
+        tmp += abs(H[index]-w)
+        ans = min(ans, tmp)
+    print(ans)
 
 
 if __name__ == "__main__":
