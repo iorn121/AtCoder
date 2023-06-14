@@ -1336,7 +1336,58 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N = int(input())
+    P = list(map(int, input().split()))
+
+    output = []
+    tot = 0
+
+    j = 0
+    i_ = 1
+    while True:
+        while j < N and P[j] % 2:
+            j += 2
+        if j >= N:
+            break
+
+        if P[i_] % 2:
+            i = i_
+            dif = i-j
+
+            while dif < -1:
+                output.append(f"B {i+1}")
+                P[i+2], P[i] = P[i], P[i+2]
+                i += 2
+                dif += 2
+
+            while dif > 1:
+                output.append(f"B {i-1}")
+                P[i-2], P[i] = P[i], P[i-2]
+                i -= 2
+                dif -= 2
+
+            if dif == -1:
+                output.append(f"A {j}")
+                P[j], P[j-1] = P[j-1], P[j]
+            elif dif == 1:
+                output.append(f"A {j+1}")
+                P[j], P[j+1] = P[j+1], P[j]
+
+            j += 2
+        else:
+            i_ += 2
+
+    for i in range(1, N+1):
+        j = i-1
+        k = P.index(i)
+
+        while k > j:
+            output.append(f"B {k-1}")
+            P[k-2], P[k] = P[k], P[k-2]
+            k -= 2
+
+    print(len(output))
+    print("\n".join(output))
 
 
 if __name__ == "__main__":
