@@ -1030,9 +1030,20 @@ class ModInt:
 
 
 def main():
-    N = I()
+    N, H = MI()
+    AB = [LI() for _ in range(N)]
+    A_max = max([a for a, b in AB])
+    AB.sort(key=lambda x: x[1], reverse=True)
+    ans = (H+A_max-1)//A_max
+    for i in range(N):
+        H -= AB[i][1]
+        if H <= 0:
+            ans = min(ans, i+1)
+            break
+        ans = min(ans, i+1+(H+A_max-1)//A_max)
+        # print(H,ans)
+    print(ans)
 
 
 if __name__ == "__main__":
     main()
-
