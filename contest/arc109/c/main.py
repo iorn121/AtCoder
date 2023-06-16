@@ -1336,7 +1336,9 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N, K = MI()
+    S = ST()
+    print(S)
 
 
 if __name__ == "__main__":
