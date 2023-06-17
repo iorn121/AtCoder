@@ -1337,8 +1337,14 @@ class mf_graph:
 
 def main():
     N, K = MI()
-    S = ST()
-    print(S)
+    S = list(ST())
+    win = {"RR": "R", "RS": "R", "RP": "P", "SS": "S", "SP": "S", "SR": "R", "PP": "P", "PR": "P", "PS": "S"}
+    for _ in range(K):
+        T = S*2
+        for i in range(N):
+            # print(T[2*i:2*(i+1)])
+            S[i] = win["".join(T[2*i:2*(i+1)])]
+    print(S[0])
 
 
 if __name__ == "__main__":
