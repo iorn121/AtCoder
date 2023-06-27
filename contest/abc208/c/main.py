@@ -1,23 +1,11 @@
 N, K = map(int, input().split())
 
 A = list(map(int, input().split()))
-
-num_list = []
-
-for i in range(N):
-    num_list.append((A[i], i))
-
-num_list.sort()
-
-ans = [0]*N
+A_sort = sorted(A)
 
 X = K//N
 K %= N
+get_line = A_sort[K]
 
-for i in range(N):
-    ans[num_list[i][1]] = X
-    if i < K:
-        ans[num_list[i][1]] += 1
-
-for i in range(N):
-    print(ans[i])
+for a in A:
+    print(X+1 if a < get_line else X)

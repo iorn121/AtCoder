@@ -961,7 +961,7 @@ def prime_list(N):
 def main():
     N = I()
     ans = []
-    for i in range(1, 9*17+1):
+    for i in range(1, 9*18+1):
         if i > N:
             break
         fx = i

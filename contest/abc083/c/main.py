@@ -925,6 +925,7 @@ def inversion_num(L: list):
 X, Y = MI()
 a = Y//X
 ans = 0
+
 while a >= 2**ans:
     ans += 1
 print(ans)
