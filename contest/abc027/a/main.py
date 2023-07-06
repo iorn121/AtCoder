@@ -936,7 +936,9 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    L = LI()
+    d = collections.Counter(L)
+    print(d.most_common()[-1][0])
 
 
 main()
