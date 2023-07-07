@@ -933,3 +933,12 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+
+S = S()
+K = I()
+st = set()
+for i in range(len(S)-K+1):
+    k = S[i:i+K]
+    st.add(k)
+print(len(st))
