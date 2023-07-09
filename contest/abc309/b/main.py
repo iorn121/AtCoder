@@ -1337,6 +1337,46 @@ class mf_graph:
 
 def main():
     N = I()
+    A = [list(map(int, ST())) for _ in range(N)]
+    # if N == 2:
+    #     print(A[1][0], A[0][0], sep="")
+    #     print(A[0][1], A[1][1], sep="")
+    #     exit()
+    # core = [a[1:-1] if 0 < i < N-1 else [] for i, a in enumerate(A)]
+    # outside = A[0][:]
+    # for i in range(1, N-1):
+    #     outside.append(A[i][-1])
+    # outside += A[-1][::-1]
+    # for i in range(N-2, 0, -1):
+    #     outside.append(A[i][0])
+    # outside = [outside[-1]]+outside[:-1]
+    # # print(len(outside))
+    # # print(outside)
+    # for i in range(N):
+    #     if i == 0:
+    #         print(*outside[:N], sep="")
+    #     elif i == N-1:
+    #         print(*outside[2*N-2:3*N-2][::-1], sep="")
+    #     else:
+    #         ans = [outside[-i]]+core[i]+[outside[N+i-1]]
+    #         print(*ans, sep="")
+    AC = [a[:] for a in A]
+    for i in range(N):
+        for j in range(N):
+            if i == 0 and j == 0:
+                AC[i][j] = A[1][0]
+            elif i == 0:
+                AC[i][j] = A[0][j-1]
+            elif i == N-1 and j == N-1:
+                AC[i][j] = A[N-2][N-1]
+            elif i == N-1:
+                AC[i][j] = A[N-1][j+1]
+            elif j == 0:
+                AC[i][j] = A[i+1][0]
+            elif j == N-1:
+                AC[i][j] = A[i-1][N-1]
+    for a in AC:
+        print(*a, sep="")
 
 
 if __name__ == "__main__":
