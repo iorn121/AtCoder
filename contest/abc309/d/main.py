@@ -1336,7 +1336,39 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N1, N2, M = MI()
+    G = [[] for i in range(N1+N2)]
+    for _ in range(M):
+        a, b = MI()
+        a -= 1
+        b -= 1
+        G[a].append(b)
+        G[b].append(a)
+    seen = [-1]*(N1+N2)
+    q = collections.deque([])
+    q.append(0)
+    seen[0] = 0
+    while q:
+        v = q.popleft()
+        for nv in G[v]:
+            if seen[nv] >= 0:
+                continue
+            seen[nv] = seen[v]+1
+            q.append(nv)
+    q = collections.deque([])
+    q.append(N1+N2-1)
+    seen2 = [-1]*(N1+N2)
+    seen2[N1+N2-1] = 0
+    while q:
+        v = q.popleft()
+        for nv in G[v]:
+            if seen2[nv] >= 0:
+                continue
+            seen2[nv] = seen2[v]+1
+            q.append(nv)
+    # print(seen)
+    # print(seen2)
+    print(max(seen)+max(seen2)+1)
 
 
 if __name__ == "__main__":
