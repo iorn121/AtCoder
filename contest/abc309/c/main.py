@@ -1336,7 +1336,19 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N, K = MI()
+    event = [(0, 0)]
+    start = 0
+    for _ in range(N):
+        a, b = MI()
+        start += b
+        event.append((a, -b))
+    event.sort()
+    for x, y in event:
+        start += y
+        if start <= K:
+            print(x+1)
+            exit()
 
 
 if __name__ == "__main__":
