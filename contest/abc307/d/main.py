@@ -1337,6 +1337,20 @@ class mf_graph:
 
 def main():
     N = I()
+    S = ST()
+    ans = ""
+    left = []
+    delete = []
+    for i, s in enumerate(S):
+        if s == "(":
+            left.append(i)
+        if s == ")":
+            if left:
+                start = left.pop()
+                delete.append((start, i))
+    for f, l in delete:
+        ans += S[f:l]
+    print(ans)
 
 
 if __name__ == "__main__":
