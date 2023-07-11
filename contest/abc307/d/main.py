@@ -1348,8 +1348,18 @@ def main():
             if left:
                 start = left.pop()
                 delete.append((start, i))
-    for f, l in delete:
-        ans += S[f:l]
+    # print(delete)
+    use = [0]*(N+1)
+    use_ruiseki = [0]*(N+1)
+    for first, last in delete:
+        use[first] += 1
+        use[last+1] -= 1
+    for i in range(N):
+        use_ruiseki[i+1] = use_ruiseki[i]+use[i]
+    # print(use_ruiseki)
+    for i in range(N):
+        if use_ruiseki[i+1] == 0:
+            ans += S[i]
     print(ans)
 
 
