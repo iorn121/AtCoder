@@ -1336,7 +1336,17 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N, M = MI()
+    P = [-1]+LI()
+    safe = [-1]*N
+    for i in range(M):
+        x, y = MI()
+        x -= 1
+        safe[x] = max(safe[x], y)
+    print(safe)
+    for i in range(N-1):
+        safe[i+1] = max(safe[i+1], safe[P[i+1]]-1)
+        print(safe)
 
 
 if __name__ == "__main__":
