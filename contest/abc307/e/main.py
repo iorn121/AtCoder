@@ -136,7 +136,17 @@ def modinv(a, mod=MOD):
         return x % mod
 
 
+def modinv2(b, mod=MOD):
+    fact = [1]*(b+2)
+    fact_inv = [1]*(b+2)
+    for i in range(1, b+2):
+        fact[i] = (fact[i-1]*i) % mod
+    fact_inv[b+1] = pow(fact[b+1], mod-2, mod)
+    return fact_inv
+
 # combinationの逆元を求める
+
+
 def combination_modinv(n, r, mod=MOD):
     if n < 0 or r < 0 or n < r:
         return 0
@@ -1337,16 +1347,22 @@ class mf_graph:
 
 def main():
     N, M = MI()
-    P = [-1]+LI()
-    safe = [-1]*N
-    for i in range(M):
-        x, y = MI()
-        x -= 1
-        safe[x] = max(safe[x], y)
-    print(safe)
-    for i in range(N-1):
-        safe[i+1] = max(safe[i+1], safe[P[i+1]]-1)
-        print(safe)
+    mod = MOD
+    ans = 0
+    fact = [1]*(N+2)
+    fact_inv = [1]*(N+2)
+    for i in range(1, N+2):
+        fact[i] = (fact[i-1]*i) % mod
+    fact_inv[N+1] = pow(fact[N+1], mod-2, mod)
+    for i in range(N, -1, -1):
+        fact_inv[i] = (fact_inv[i+1]*(i+1)) % mod
+
+    def choose(n, r):
+        return fact[n]*fact_inv[r] % MOD*fact_inv[n-r] % MOD
+    for k in range(N+1):
+        ans += (-1 if k % 2 else 1)*pow(M, max(1, N-k), MOD)*choose(N, k) % MOD
+
+    print(ans % MOD)
 
 
 if __name__ == "__main__":
