@@ -1349,40 +1349,32 @@ def main():
     N, T, M = MI()
     S = [[0 for _ in range(T + 1)] for _ in range(N + 1)]
     S[0][0] = 1
+    ng=[0]*N
     for n in range(1, N + 1):
         for k in range(1, T + 1):
             S[n][k] = (k * S[n - 1][k] + S[n - 1][k - 1]) % MOD
-    print(S)
     ans = S[N][T]
-    print(ans)
-    uf = UnionFind(N)
-    cycle = []
-    check = [False]*N
     for _ in range(M):
         a, b = MI()
         a -= 1
         b -= 1
-        if uf.same(a, b):
-            cycle.append(len(uf.members(a)))
-            ans -= S[N-len(uf.members(a))+1][T]
-        else:
-            cycle.append(2)
-            ans -= S[N-1][T]
-            print(a, b, ans)
-            if check[a]:
-                if N-2 >= T:
-                    ans += S[N-2][T]*(len(uf.members(a))-1)
-                    print(a, ans)
-            if check[b]:
-                if N-2 >= T:
-                    ans += S[N-2][T]*(len(uf.members(b))-1)
-                    print(b, ans)
-            check[a] = True
-            check[b] = True
-            uf.union(a, b)
-    if cycle and max(cycle) > T:
-        exit(print(0))
-    print(ans)
+        ng[a] |= 1 << b
+        ng[b] |= 1 << a
+    
+    def dfs(i, bit):
+        if i == N:
+            return 1
+        if bit & (1 << i):
+            return dfs(i + 1, bit)
+        res = 0
+        for j in range(T):
+            if bit & (1 << j):
+                continue
+            if ng[i] & (1 << j):
+                continue
+            res += dfs(i + 1, bit | (1 << j))
+        return res
+
 
 
 if __name__ == "__main__":
