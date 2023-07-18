@@ -1361,18 +1361,22 @@ def main():
         ng[a] |= 1 << b
         ng[b] |= 1 << a
     
-    def dfs(i, bit):
-        if i == N:
+    def dfs(length,teams, bit):
+        if length == N:
             return 1
-        if bit & (1 << i):
-            return dfs(i + 1, bit)
+        if teams == T:
+            return 0
+        if dp[length][teams][bit] != -1:
+            return dp[length][teams][bit]
         res = 0
-        for j in range(T):
-            if bit & (1 << j):
+        for i in range(N):
+            if (bit>>i)&1:
                 continue
-            if ng[i] & (1 << j):
+            if ng[length]&(1<<i):
                 continue
-            res += dfs(i + 1, bit | (1 << j))
+            res += dfs(length+1,teams+1,bit|(1<<i))
+        res += dfs(length+1,teams,bit)
+        dp[length][teams][bit] = res
         return res
 
 
