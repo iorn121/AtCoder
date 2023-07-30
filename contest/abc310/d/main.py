@@ -1337,48 +1337,68 @@ class mf_graph:
 
 def main():
 
-    # vector<vector<long long>> S(N + 1, vector<long long>(K + 1, 0));
-    # S[0][0] = 1;
-    # for (long long n = 1; n < N + 1; n++) {
-    #     for (long long k = 1; k < K + 1; k++) {
-    #         S[n][k] = (k * S[n - 1][k] + S[n - 1][k - 1]) % MOD;
+    # unsigned N, T, M;
+    # vector<unsigned> hate, teams;
+    # 再帰関数でチーム分け
+    # unsigned dfs(unsigned now) {
+    # 最後の選手まで見て T チームに分かれていれば OK
+    #     if (now == N)
+    #         return size(teams) == T;
+    #     unsigned ans{};
+    #     すでにあるチームに now 番目の選手を追加する
+    #     for (auto &&team : teams)
+    #         チームに now 番目の選手と相性の悪い選手がいなければ
+    #         if (!(team & hate[now])) {
+    #             team ^= 1U << now;
+    #             ans += dfs(now + 1);
+    #             team ^= 1U << now;
+    #         }
+    #     チーム数に余裕があるとき、新しいチームを作る
+    #     if (size(teams) < T) {
+    #         teams.emplace_back(1U << now);
+    #         ans += dfs(now + 1);
+    #         teams.pop_back();
     #     }
+    #     return ans;
     # }
-    # cout << S[N][K] << endl;
-    # 上記のコードをPythonの関数に変換して
-    N, T, M = MI()
-    S = [[0 for _ in range(T + 1)] for _ in range(N + 1)]
-    S[0][0] = 1
-    ng=[0]*N
-    for n in range(1, N + 1):
-        for k in range(1, T + 1):
-            S[n][k] = (k * S[n - 1][k] + S[n - 1][k - 1]) % MOD
-    ans = S[N][T]
-    for _ in range(M):
-        a, b = MI()
-        a -= 1
-        b -= 1
-        ng[a] |= 1 << b
-        ng[b] |= 1 << a
-    
-    def dfs(length,teams, bit):
-        if length == N:
-            return 1
-        if teams == T:
-            return 0
-        if dp[length][teams][bit] != -1:
-            return dp[length][teams][bit]
-        res = 0
-        for i in range(N):
-            if (bit>>i)&1:
-                continue
-            if ng[length]&(1<<i):
-                continue
-            res += dfs(length+1,teams+1,bit|(1<<i))
-        res += dfs(length+1,teams,bit)
-        dp[length][teams][bit] = res
-        return res
+    # int main() {
+    #     using namespace std;
+    #     cin >> N >> T >> M;
+    #     hate[i] の j ビットめが 1 ⟹ i 番目の選手と j 番目の選手の相性が悪い (0-indexed)
+    #     hate = vector<unsigned>(N);
+    #     for (unsigned i{}, a, b; i < M; ++i) {
+    #         cin >> a >> b;
+    #         hate[--b] |= 1U << --a;
+    #     }
+    #     teams.reserve(T);
+    #     cout << dfs(0) << endl;
+    #     return 0;
+    # }
+    # 上記のコードをPythonの関数に変換する
+    N, T, M = map(int, input().split())
+    hate = [0] * N
+    for i in range(M):
+        a, b = map(int, input().split())
+        hate[b - 1] |= 1 << (a - 1)
+    teams = []
 
+    def dfs(now, teams):
+        if now == N:
+            return len(teams) == T
+        ans = 0
+        for i, team in enumerate(teams):
+            if not (team & hate[now]):
+                team ^= 1 << now
+                teams[i] = team
+                ans += dfs(now + 1, teams)
+                team ^= 1 << now
+                teams[i] = team
+        if len(teams) < T:
+            teams.append(1 << now)
+            ans += dfs(now + 1, teams)
+            teams.pop()
+        return ans
+    print(dfs(0, teams))
 
 
 if __name__ == "__main__":
