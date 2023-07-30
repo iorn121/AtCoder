@@ -935,8 +935,18 @@ def make_divisors(n):
     return lower_divisors + upper_divisors[::-1]
 
 
+# 最長増加部分列（LIS）
+def lis(L: list):
+    dp = [float('inf')]*len(L)
+    for l in L:
+        dp[bisect_left(dp, l)] = l
+    return bisect_left(dp, float('inf'))
+
+
 def main():
     N = I()
+    Cards = [I() for _ in range(N)]
+    print(N-lis(Cards))
 
 
 if __name__ == "__main__":
