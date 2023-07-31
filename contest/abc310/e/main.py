@@ -1337,6 +1337,19 @@ class mf_graph:
 
 def main():
     N = I()
+    S = ST()
+    dp = [[0, 0] for i in range(N)]
+    for i, s in enumerate(S):
+        x = int(s)
+        dp[i][x] += 1
+        if i > 0:
+            if x == 0:
+                dp[i][1] += sum(dp[i-1])
+            else:
+                dp[i][1] += dp[i-1][0]
+                dp[i][0] += dp[i-1][1]
+    ans = sum(d[1] for d in dp)
+    print(ans)
 
 
 if __name__ == "__main__":
