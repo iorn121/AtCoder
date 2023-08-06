@@ -1345,7 +1345,36 @@ def lis(L: list):
 
 
 def main():
-    N = I()
+    N, K = MI()
+
+    def send(test):
+        print("? {}".format(" ".join(map(str, test))))
+        sys.stdout.flush()
+        return I()
+    result = [-1]*(K+1)
+    s = 0
+    ans = [-1]*N
+    for i in range(K+1):
+        test = []
+        for j in range(K+1):
+            if i == j:
+                continue
+            test.append(j+1)
+        result[i] = send(test)
+        s ^= result[i]
+    for i in range(K+1):
+        ans[i] = s ^ result[i]
+    s = 0
+    for i in range(K-1):
+        s ^= result[i]
+    test = [i+1 for i in range(K-1)]
+    for i in range(K+1, N):
+        test.append(i+1)
+        res = send(test)
+        test.pop()
+        ans[i] = s ^ res
+    print("! {}".format(" ".join(map(str, ans))))
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":
