@@ -1346,6 +1346,30 @@ def lis(L: list):
 
 def main():
     N = I()
+    A = itertools.groupby(list(ST()))
+    nA = []
+    for num, a in A:
+        nA.append([int(num), len(list(a))])
+    for x, y in zip(nA[:-1], nA[1:]):
+        if x[0] != 1 and y[0] != 1:
+            print(-1)
+            exit()
+        if x[0] != 1 and x[1] > 1:
+            print(-1)
+            exit()
+        if y[0] != 1 and y[1] > 1:
+            print(-1)
+            exit()
+    ans = 0
+    tmp = -1
+    for num, length in nA[::-1]:
+        if num == 1:
+            ans += length+ans*(tmp-1) % MOD
+        else:
+            ans += 1
+            tmp = num
+        ans %= MOD
+    print(ans-1)
 
 
 if __name__ == "__main__":
