@@ -882,55 +882,24 @@ class SortedMultiset(Generic[T]):
 
 N, M = MI()
 G = [[] for _ in range(N)]
-seen = set()
-can_start = set()
-cannot_start = set()
-check = [[False]*N for _ in range(N)]
-for i in range(N):
-    check[i][i] = True
 for _ in range(M):
     u, v = MI()
     u -= 1
     v -= 1
-    check[u][v] = True
-    cannot_start.add(v)
-    if v in can_start:
-        can_start.remove(v)
-    if u not in cannot_start:
-        can_start.add(u)
     G[u].append(v)
 ans = 0
-for start in can_start:
-    tour, in_time, out_time = EulerTour(N, G, start)
-    print(tour)
-    tour_set = set(tour)
-    tour_list = list(tour_set)
-    for i, t in enumerate(tour_list):
-        for j, tt in enumerate(tour_list):
-            if i == j or check[t][tt]:
-                continue
-            if in_time[t]+out_time[tt] < len(tour_list)*2-2:
-                ans += 1
-                check[t][tt] = True
-                print(t, tt)
-    seen |= tour_set
-    print(seen)
-
 for i in range(N):
-    if i in seen:
-        continue
-    tour, in_time, out_time = EulerTour(N, G, i)
-    print(tour)
-    tour_set = set(tour)
-    tour_list = list(tour_set)
-    for i, t in enumerate(tour_list):
-        for j, tt in enumerate(tour_list):
-            if i == j or check[t][tt]:
-                continue
-            if in_time[t]+out_time[tt] < len(tour_list)*2-2:
-                ans += 1
-                check[t][tt] = True
-                print(t, tt)
-    seen |= tour_set
-    print(seen)
+    q = collections.deque()
+    q.append(i)
+    dist = [-1] * N
+    dist[i] = 0
+    while q:
+        v = q.popleft()
+        for nv in G[v]:
+            if dist[nv] == -1:
+                dist[nv] = dist[v] + 1
+                q.append(nv)
+    for j in range(N):
+        if dist[j] >= 2:
+            ans += 1
 print(ans)
