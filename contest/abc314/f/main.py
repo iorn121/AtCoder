@@ -1346,6 +1346,20 @@ def lis(L: list):
 
 def main():
     N = I()
+    uf = UnionFind(N)
+    ans = [ModInt(0)]*N
+    for i in range(N-1):
+        a, b = MI()
+        pa = uf.find(a-1)
+        pb = uf.find(b-1)
+        mema = uf.size(a-1)
+        memb = uf.size(b-1)
+        ans[pa] += ModInt(mema)/ModInt(mema+memb)
+        ans[pb] += ModInt(memb)/ModInt(mema+memb)
+        uf.union(a-1, b-1)
+    for i in range(N):
+        ans[i] = ans[uf.find(i)]
+    print(*ans)
 
 
 if __name__ == "__main__":
