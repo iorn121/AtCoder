@@ -1357,19 +1357,16 @@ def floor_sum(n, m, a, b):
 def main():
     N = I()
     XY = [LI() for i in range(N)]
-    dp = [float("inf")]*(N+1)
-    skip = [0]*(N+1)
-    dp[0] = 0
+    dp = [[float("inf")]*30 for _ in range(N)]
+    dp[0][0] = 0
     for i in range(1, N):
-        for j in range(i-1, -1, -1):
-            dist = math.sqrt(pow(XY[i][0]-XY[j][0], 2)+pow(XY[i][1]-XY[j][1], 2))
-            if i-j == 1:
-                dp[i] = min(dp[i], dp[j]+dist)
-            elif dp[i] > dp[j]+dist+skip[j]:
-                dp[i] = dp[j]+dist+skip[j]
-                skip[i] = 2**(i-j-2) if skip[j] == 0 else skip[j]*2**(i-j-2)
-    print(skip)
-    print(dp)
+        for j in range(i):
+            dist = math.sqrt(pow(XY[i][0]-XY[i-j-1][0], 2)+pow(XY[i][1]-XY[i-j-1][1], 2))
+            for k in range(30-j):
+                dp[i][j+k] = min(dp[i][j+k], dp[i-j-1][k]+dist)
+    for j in range(1, 30):
+        dp[-1][j] += 2**(j-1)
+    print(min(dp[-1]))
 
 
 if __name__ == "__main__":
