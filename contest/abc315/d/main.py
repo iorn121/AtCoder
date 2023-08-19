@@ -1334,9 +1334,8 @@ class mf_graph:
                     que.append(to)
         return visited
 
+
 # 最長増加部分列（LIS）
-
-
 def lis(L: list):
     dp = [float('inf')]*len(L)
     for l in L:
@@ -1344,22 +1343,77 @@ def lis(L: list):
     return bisect_left(dp, float('inf'))
 
 
+# Floor Sum
+def floor_sum(n, m, a, b):
+    ret = 0
+    while n > 0 and m > 0:
+        ret += (a // m) * n * (n-1) // 2 + (b // m) * n
+        a, b = a % m, b % m
+        last = a * n + b
+        n, m, a, b = last // m, a, m, last % m
+    return ret
+
+
 def main():
-    N = I()
-    uf = UnionFind(N)
-    ans = [ModInt(0)]*N
-    for i in range(N-1):
-        a, b = MI()
-        pa = uf.find(a-1)
-        pb = uf.find(b-1)
-        mema = uf.size(a-1)
-        memb = uf.size(b-1)
-        ans[pa] += ModInt(mema)/ModInt(mema+memb)
-        ans[pb] += ModInt(memb)/ModInt(mema+memb)
-        uf.union(a-1, b-1)
-    for i in range(N):
-        ans[i] = ans[uf.find(i)]
-    print(*ans)
+    H, W = MI()
+    field = SS(H)
+    row_grid = [[0]*26 for _ in range(H)]
+    col_grid = [[0]*26 for _ in range(W)]
+    row_nonzero_num = [0]*H
+    col_nonzero_num = [0]*W
+    check_row = []
+    check_col = []
+    num_row = H
+    num_col = W
+    for i in range(H):
+        for j in range(W):
+            color = ord(field[i][j])-ord('a')
+            row_grid[i][color] += 1
+            col_grid[j][color] += 1
+            if row_grid[i][color] == 1:
+                row_nonzero_num[i] += 1
+            if col_grid[j][color] == 1:
+                col_nonzero_num[j] += 1
+    for i in range(H):
+        if row_nonzero_num[i] == 1:
+            check_row.append(i)
+    for j in range(W):
+        if col_nonzero_num[j] == 1:
+            check_col.append(j)
+    while check_row or check_col:
+        if check_row:
+            row = check_row.pop()
+            # print(row, "delete row", check_row)
+            num_row -= 1
+            del_col = 0
+            for x in range(26):
+                if row_grid[row][x] > 0:
+                    del_col = x
+                    break
+            for j in range(W):
+                if col_grid[j][del_col] > 0:
+                    col_grid[j][del_col] -= 1
+                    if col_grid[j][del_col] == 0:
+                        col_nonzero_num[j] -= 1
+                        if col_nonzero_num[j] == 1 and num_row >= 2:
+                            check_col.append(j)
+        if check_col:
+            col = check_col.pop()
+            # print(col, "delete col", check_col)
+            num_col -= 1
+            del_col = 0
+            for x in range(26):
+                if col_grid[col][x] > 0:
+                    del_col = x
+                    break
+            for i in range(H):
+                if row_grid[i][del_col] > 0:
+                    row_grid[i][del_col] -= 1
+                    if row_grid[i][del_col] == 0:
+                        row_nonzero_num[i] -= 1
+                        if row_nonzero_num[i] == 1 and num_col >= 2:
+                            check_row.append(i)
+    print(num_row*num_col)
 
 
 if __name__ == "__main__":

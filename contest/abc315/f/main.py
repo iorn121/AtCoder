@@ -1334,9 +1334,8 @@ class mf_graph:
                     que.append(to)
         return visited
 
+
 # 最長増加部分列（LIS）
-
-
 def lis(L: list):
     dp = [float('inf')]*len(L)
     for l in L:
@@ -1344,22 +1343,33 @@ def lis(L: list):
     return bisect_left(dp, float('inf'))
 
 
+# Floor Sum
+def floor_sum(n, m, a, b):
+    ret = 0
+    while n > 0 and m > 0:
+        ret += (a // m) * n * (n-1) // 2 + (b // m) * n
+        a, b = a % m, b % m
+        last = a * n + b
+        n, m, a, b = last // m, a, m, last % m
+    return ret
+
+
 def main():
     N = I()
-    uf = UnionFind(N)
-    ans = [ModInt(0)]*N
-    for i in range(N-1):
-        a, b = MI()
-        pa = uf.find(a-1)
-        pb = uf.find(b-1)
-        mema = uf.size(a-1)
-        memb = uf.size(b-1)
-        ans[pa] += ModInt(mema)/ModInt(mema+memb)
-        ans[pb] += ModInt(memb)/ModInt(mema+memb)
-        uf.union(a-1, b-1)
-    for i in range(N):
-        ans[i] = ans[uf.find(i)]
-    print(*ans)
+    XY = [LI() for i in range(N)]
+    dp = [float("inf")]*(N+1)
+    skip = [0]*(N+1)
+    dp[0] = 0
+    for i in range(1, N):
+        for j in range(i-1, -1, -1):
+            dist = math.sqrt(pow(XY[i][0]-XY[j][0], 2)+pow(XY[i][1]-XY[j][1], 2))
+            if i-j == 1:
+                dp[i] = min(dp[i], dp[j]+dist)
+            elif dp[i] > dp[j]+dist+skip[j]:
+                dp[i] = dp[j]+dist+skip[j]
+                skip[i] = 2**(i-j-2) if skip[j] == 0 else skip[j]*2**(i-j-2)
+    print(skip)
+    print(dp)
 
 
 if __name__ == "__main__":
