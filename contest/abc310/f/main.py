@@ -1337,6 +1337,24 @@ class mf_graph:
 
 def main():
     N = I()
+    A = LI()
+    bitdp = [[0]*(1 << 11) for i in range(N+1)]
+    bitdp[0][1] = 1
+    for i in range(N):
+        modinvi = modinv(A[i], MOD)
+        for j in range(1 << 11):
+            for k in range(1, min(10, A[i])+1):
+                newbit = ((1 << 11)-1) & (j | j << k)
+                bitdp[i+1][newbit] += bitdp[i][j]*modinvi % MOD
+                bitdp[i+1][j | newbit] %= MOD
+            bitdp[i+1][j] += bitdp[i][j]*modinvi % MOD*max(0, A[i]-10) % MOD
+            bitdp[i+1][j] %= MOD
+        # print(bitdp[i+1][:30])
+    ans = 0
+    for i in range(1 << 10, 1 << 11):
+        ans += bitdp[N][i]
+        ans %= MOD
+    print(ans)
 
 
 if __name__ == "__main__":
