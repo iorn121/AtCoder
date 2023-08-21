@@ -1336,7 +1336,64 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    #   long long n,m;
+    #   cin >> n >> m;
+    #   vector<string> s(n);
+    #   for(auto &nx : s){cin >> nx;}
+    #   for(int i=0;i<n;i++){
+    #     for(int j=0;j<m;j++){
+    #       if(s[i][j]=='#'){
+    #         if(i!=(n-1)){s[i+1][j]='#';}
+    #         if(i!=(n-1) && j!=(m-1)){s[i+1][j+1]='#';}
+    #       }
+    #     }
+    #   }
+    #   vector<long long> dp(m+1,0);
+    #   dp[m]=1;
+    #   for(int c=-m+1;c<=n-1;c++){
+    #     for(int j=m-1;j>=0;j--){
+    #       dp[j]+=dp[j+1];
+    #       dp[j]%=mod;
+    #     }
+    #     for(int j=0;j<m;j++){
+    #       int i=j+c;
+    #       if(i<0){dp[j]=0;}
+    #       else if(i>=n || s[i][j]=='#'){dp[j+1]=0;}
+    #     }
+    #   }
+    #   long long res=0;
+    #   for(auto &nx : dp){res+=nx;res%=mod;}
+    #   cout << res << "\n";
+    #   return 0;
+    # 上記のコードをPythonで書き直したもの
+    n, m = map(int, input().split())
+    s = [list(input()) for i in range(n)]
+    for i in range(n):
+        for j in range(m):
+            if s[i][j] == "#":
+                if i != n-1:
+                    s[i+1][j] = "#"
+                if i != n-1 and j != m-1:
+                    s[i+1][j+1] = "#"
+    dp = [0 for i in range(m+1)]
+    dp[m] = 1
+    for c in range(-m+1, n):
+        for j in range(m-1, -1, -1):
+            dp[j] += dp[j+1]
+            dp[j] %= MOD
+        # print(dp)
+        for j in range(m):
+            i = j+c
+            if i < 0:
+                dp[j] = 0
+            elif i >= n or s[i][j] == "#":
+                dp[j+1] = 0
+        # print(dp)
+    res = 0
+    for nx in dp:
+        res += nx
+        res %= MOD
+    print(res)
 
 
 if __name__ == "__main__":
