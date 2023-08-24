@@ -1336,7 +1336,34 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N, M = MI()
+    A = LI()
+    G = [[] for _ in range(N)]
+    # 入ってくる数をカウント
+    cnt = [0]*N
+    for _ in range(M):
+        x, y = MI()
+        G[x-1].append(y-1)
+        cnt[y-1] += 1
+    start = [i for i in range(N) if cnt[i] == 0]
+    minGold = [A[i] if cnt[i] == 0 else 10**10 for i in range(N)]
+
+    q = collections.deque(start)
+    ans = -10**10
+    # print(minGold)
+    while q:
+        now = q.popleft()
+        # print(now)
+        for next in G[now]:
+            ans = max(ans, A[next]-minGold[now])
+            cnt[next] -= 1
+            if cnt[next] == 0:
+                q.append(next)
+            minGold[next] = min(minGold[next], minGold[now])
+            minGold[next] = min(minGold[next], A[next])
+        # print(minGold)
+        # print(ans)
+    print(ans)
 
 
 if __name__ == "__main__":
