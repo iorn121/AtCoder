@@ -435,7 +435,7 @@ class SegTree:
     query : 区間[l,r)のseg_funcモノイドの結果を出力
     """
 
-    def __init__(self, init_val: list, ide_ele: int = 0):
+    def __init__(self, init_val, ide_ele: int = 0):
         n = len(init_val)
         self.ide_ele = ide_ele
         self.num = 1 << (n-1).bit_length()
@@ -445,8 +445,8 @@ class SegTree:
         for i in range(self.num-1, 0, -1):
             self.tree[i] = self.segfunc(self.tree[2*i], self.tree[2*i+1])
 
-    def segfunc(x, y):
-        return x+y
+    def segfunc(self, x, y):
+        return min(x, y)
 
     def add(self, k, x):
         k += self.num
@@ -1337,6 +1337,32 @@ class mf_graph:
 
 def main():
     N = I()
+    H, W, D = [], [], []
+    HWD = []
+    for _ in range(N):
+        h, w, d = sorted(LI())
+        H.append(h)
+        W.append(w)
+        D.append(d)
+        HWD.append((h, w, d))
+    iH = {x: i for i, x in enumerate(sorted(set(H)))}
+    iW = {x: i for i, x in enumerate(sorted(set(W)))}
+    iD = {x: i for i, x in enumerate(sorted(set(D)))}
+    HWD = [(iH[h], iW[w], iD[d]) for h, w, d in HWD]
+    HWD = sorted(HWD, key=lambda x: (x[0], -x[1], -x[2]))
+    segtree = SegTree([1 << 60]*(N+1), ide_ele=1 << 60)
+    flg = False
+    # print(HWD)
+    # print(segtree.query(0, N))
+    for i in range(N):
+        h, w, d = HWD[i]
+        di = segtree.query(0, w)
+        # print(di, d)
+        if di < d:
+            flg = True
+            break
+        segtree.update(w, min(d, segtree.query(w, w+1)))
+    print("Yes" if flg else "No")
 
 
 if __name__ == "__main__":
