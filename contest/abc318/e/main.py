@@ -1357,20 +1357,41 @@ def floor_sum(n, m, a, b):
 def main():
     N = I()
     A = LI()
-    cnt = [0]*N
-    pcnt = [0]*N
-    amnt = [0]*N
-    pamnt = [0]*N
     ans = 0
-    for i, a in enumerate(A):
-        a -= 1
-        cnt[a] += 1
-        amnt[a] += i
-        if pcnt[a] > 0:
-            ans += (i-1)*pcnt[a]-pamnt[a]-pcnt[a]+1
-        pcnt[a] = cnt[a]
-        pamnt[a] = amnt[a]
-        print(i, a, ans)
+
+    left = [0]*N
+    right = [0]*N
+    for i in range(2, N):
+        right[A[i]-1] += 1
+    left[A[0]-1] += 1
+    tmp = sum(left[i]*right[i] for i in range(N))
+    for center in range(1, N-1):
+        cA = A[center]-1
+        pA = A[center-1]-1
+        if center == 1:
+            # print(left)
+            # print(right)
+            # print(tmp)
+            ans += tmp
+            ans -= left[cA]*right[cA]
+            continue
+        if cA == pA:
+            tmp -= left[pA]*right[pA]
+            left[pA] += 1
+            right[pA] -= 1
+            tmp += left[pA]*right[pA]
+        else:
+            tmp -= left[cA]*right[cA]
+            tmp -= left[pA]*right[pA]
+            left[pA] += 1
+            right[cA] -= 1
+            tmp += left[cA]*right[cA]
+            tmp += left[pA]*right[pA]
+        ans += tmp
+        ans -= left[cA]*right[cA]
+        # print(left)
+        # print(right)
+        # print(tmp)
     print(ans)
 
 

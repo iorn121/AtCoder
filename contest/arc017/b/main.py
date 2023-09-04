@@ -1,3 +1,4 @@
+import time
 from typing import Generic, Iterable, Iterator, TypeVar, Optional, List
 from array import array
 from bisect import bisect_left, bisect_right, insort
@@ -15,12 +16,16 @@ def I(): return int(sys.stdin.readline().rstrip())
 def MI(): return map(int, sys.stdin.readline().rstrip().split())
 def LI(): return list(map(int, sys.stdin.readline().rstrip().split()))
 def LII(H): return [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(H)]
-def S(): return sys.stdin.readline().rstrip()
-def SS(H): return [S() for _ in range(H)]
+def ST(): return sys.stdin.readline().rstrip()
+def SS(H): return [ST() for _ in range(H)]
 def LS(): return list(sys.stdin.readline().rstrip().split())
 def ARRAY(L): return array("i", L)
 
 
+INF = (1 << 63)-1
+DIFF = 10 ** -9
+DX = [1, 0, -1, 0, 1, 1, -1, -1]
+DY = [0, 1, 0, -1, 1, -1, 1, -1]
 MOD = 998244353
 
 # 累積和 ans=list(itertools.accumulate(L))
@@ -29,6 +34,14 @@ MOD = 998244353
 # 重複なし組み合わせ ans=list(itertools.combinations(L,2))
 # 重複あり組み合わせ ans=list(itertools.combinations_with_replacement(L,2))
 # nCr ans=math.comb(n,r)
+
+
+# 日付を比較, date1 < date2ならTrue, O(1)
+def compare_date(date1, date2):
+    # date = "2019/04/30"
+    formatted_date1 = time.strptime(date1, "%Y/%m/%d")
+    formatted_date2 = time.strptime(date2, "%Y/%m/%d")
+    return formatted_date1 < formatted_date2
 
 
 # 四捨五入
@@ -47,7 +60,7 @@ def floor(x):
 
 
 # Nまでの数を素数かどうか判定（エラトステネスのふるい）
-def prime_list(n: int):
+def prime_judge(n: int):
     is_prime = [True] * (n + 1)
     is_prime[0], is_prime[1] = False, False
     for i in range(2, int(math.sqrt(n)) + 1):
@@ -432,7 +445,7 @@ class SegTree:
         for i in range(self.num-1, 0, -1):
             self.tree[i] = self.segfunc(self.tree[2*i], self.tree[2*i+1])
 
-    def segfunc(x, y):
+    def segfunc(self, x, y):
         return x+y
 
     def add(self, k, x):
@@ -935,33 +948,428 @@ def make_divisors(n):
     return lower_divisors + upper_divisors[::-1]
 
 
-W, H, N = MI()
-field = [[False]*W for _ in range(H)]
-for _ in range(N):
-    x, y, a = MI()
-    if a == 1:
-        for i in range(H):
-            for j in range(W):
-                if j < x:
-                    field[i][j] = True
-    elif a == 2:
-        for i in range(H):
-            for j in range(W):
-                if x <= j:
-                    field[i][j] = True
-    elif a == 3:
-        for i in range(H):
-            for j in range(W):
-                if i < y:
-                    field[i][j] = True
-    else:
-        for i in range(H):
-            for j in range(W):
-                if y <= i:
-                    field[i][j] = True
-cnt = 0
-for i in range(H):
-    for j in range(W):
-        if not field[i][j]:
+# Nまでの素数列挙
+# 計算量 O(logN)
+def prime_list(N):
+    H = [False] * (N + 1)
+    primes = []
+    for i in range(2, N + 1):
+        if H[i]:
+            continue
+        primes.append(i)
+        for j in range(i, N + 1, i):
+            H[j] = True
+    return primes
+
+
+class ModInt:
+    def __init__(self, x, mod=998244353):
+        self.x = x % mod
+        self.mod = mod
+
+    def __str__(self):
+        return str(self.x)
+
+    __repr__ = __str__
+
+    def __add__(self, other):
+        return (
+            ModInt(self.x + other.x) if isinstance(other, ModInt) else
+            ModInt(self.x + other)
+        )
+
+    def __sub__(self, other):
+        return (
+            ModInt(self.x - other.x) if isinstance(other, ModInt) else
+            ModInt(self.x - other)
+        )
+
+    def __mul__(self, other):
+        return (
+            ModInt(self.x*other.x) if isinstance(other, ModInt) else
+            ModInt(self.x*other)
+        )
+
+    def __truediv__(self, other):
+        return (
+            ModInt(
+                self.x*pow(other.x, self.mod-2, self.mod)
+            ) if isinstance(other, ModInt) else
+            ModInt(self.x*pow(other, self.mod-2, self.mod))
+        )
+
+    def __pow__(self, other):
+        return (
+            ModInt(pow(self.x, other.x, self.mod)) if isinstance(other, ModInt) else
+            ModInt(pow(self.x, other, self.mod))
+        )
+
+    __radd__ = __add__
+
+    def __rsub__(self, other):
+        return (
+            ModInt(other.x-self.x) if isinstance(other, ModInt) else
+            ModInt(other-self.x)
+        )
+
+    __rmul__ = __mul__
+
+    def __rtruediv__(self, other):
+        return (
+            ModInt(
+                other.x * pow(self.x, self.mod-2, self.mod)
+            ) if isinstance(other, ModInt) else
+            ModInt(other * pow(self.x, self.mod-2, self.mod))
+        )
+
+    def __rpow__(self, other):
+        return (
+            ModInt(pow(other.x, self.x, self.mod)) if isinstance(other, ModInt) else
+            ModInt(pow(other, self.x, self.mod))
+        )
+
+
+class FFT():
+    def primitive_root_constexpr(self, m):
+        if m == 2:
+            return 1
+        if m == 167772161:
+            return 3
+        if m == 469762049:
+            return 3
+        if m == 754974721:
+            return 11
+        if m == 998244353:
+            return 3
+        divs = [0]*20
+        divs[0] = 2
+        cnt = 1
+        x = (m-1)//2
+        while (x % 2 == 0):
+            x //= 2
+        i = 3
+        while (i*i <= x):
+            if (x % i == 0):
+                divs[cnt] = i
+                cnt += 1
+                while (x % i == 0):
+                    x //= i
+            i += 2
+        if x > 1:
+            divs[cnt] = x
             cnt += 1
-print(cnt)
+        g = 2
+        while (1):
+            ok = True
+            for i in range(cnt):
+                if pow(g, (m-1)//divs[i], m) == 1:
+                    ok = False
+                    break
+            if ok:
+                return g
+            g += 1
+
+    def bsf(self, x):
+        res = 0
+        while (x % 2 == 0):
+            res += 1
+            x //= 2
+        return res
+    rank2 = 0
+    root = []
+    iroot = []
+    rate2 = []
+    irate2 = []
+    rate3 = []
+    irate3 = []
+
+    def __init__(self, MOD):
+        self.mod = MOD
+        self.g = self.primitive_root_constexpr(self.mod)
+        self.rank2 = self.bsf(self.mod-1)
+        self.root = [0 for i in range(self.rank2+1)]
+        self.iroot = [0 for i in range(self.rank2+1)]
+        self.rate2 = [0 for i in range(self.rank2)]
+        self.irate2 = [0 for i in range(self.rank2)]
+        self.rate3 = [0 for i in range(self.rank2-1)]
+        self.irate3 = [0 for i in range(self.rank2-1)]
+        self.root[self.rank2] = pow(self.g, (self.mod-1) >> self.rank2, self.mod)
+        self.iroot[self.rank2] = pow(self.root[self.rank2], self.mod-2, self.mod)
+        for i in range(self.rank2-1, -1, -1):
+            self.root[i] = (self.root[i+1]**2) % self.mod
+            self.iroot[i] = (self.iroot[i+1]**2) % self.mod
+        prod = 1
+        iprod = 1
+        for i in range(self.rank2-1):
+            self.rate2[i] = (self.root[i+2]*prod) % self.mod
+            self.irate2[i] = (self.iroot[i+2]*iprod) % self.mod
+            prod = (prod*self.iroot[i+2]) % self.mod
+            iprod = (iprod*self.root[i+2]) % self.mod
+        prod = 1
+        iprod = 1
+        for i in range(self.rank2-2):
+            self.rate3[i] = (self.root[i+3]*prod) % self.mod
+            self.irate3[i] = (self.iroot[i+3]*iprod) % self.mod
+            prod = (prod*self.iroot[i+3]) % self.mod
+            iprod = (iprod*self.root[i+3]) % self.mod
+
+    def butterfly(self, a):
+        n = len(a)
+        h = (n-1).bit_length()
+
+        LEN = 0
+        while (LEN < h):
+            if (h-LEN == 1):
+                p = 1 << (h-LEN-1)
+                rot = 1
+                for s in range(1 << LEN):
+                    offset = s << (h-LEN)
+                    for i in range(p):
+                        l = a[i+offset]
+                        r = a[i+offset+p]*rot
+                        a[i+offset] = (l+r) % self.mod
+                        a[i+offset+p] = (l-r) % self.mod
+                    rot *= self.rate2[(~s & -~s).bit_length()-1]
+                    rot %= self.mod
+                LEN += 1
+            else:
+                p = 1 << (h-LEN-2)
+                rot = 1
+                imag = self.root[2]
+                for s in range(1 << LEN):
+                    rot2 = (rot*rot) % self.mod
+                    rot3 = (rot2*rot) % self.mod
+                    offset = s << (h-LEN)
+                    for i in range(p):
+                        a0 = a[i+offset]
+                        a1 = a[i+offset+p]*rot
+                        a2 = a[i+offset+2*p]*rot2
+                        a3 = a[i+offset+3*p]*rot3
+                        a1na3imag = (a1-a3) % self.mod*imag
+                        a[i+offset] = (a0+a2+a1+a3) % self.mod
+                        a[i+offset+p] = (a0+a2-a1-a3) % self.mod
+                        a[i+offset+2*p] = (a0-a2+a1na3imag) % self.mod
+                        a[i+offset+3*p] = (a0-a2-a1na3imag) % self.mod
+                    rot *= self.rate3[(~s & -~s).bit_length()-1]
+                    rot %= self.mod
+                LEN += 2
+
+    def butterfly_inv(self, a):
+        n = len(a)
+        h = (n-1).bit_length()
+        LEN = h
+        while (LEN):
+            if (LEN == 1):
+                p = 1 << (h-LEN)
+                irot = 1
+                for s in range(1 << (LEN-1)):
+                    offset = s << (h-LEN+1)
+                    for i in range(p):
+                        l = a[i+offset]
+                        r = a[i+offset+p]
+                        a[i+offset] = (l+r) % self.mod
+                        a[i+offset+p] = (l-r)*irot % self.mod
+                    irot *= self.irate2[(~s & -~s).bit_length()-1]
+                    irot %= self.mod
+                LEN -= 1
+            else:
+                p = 1 << (h-LEN)
+                irot = 1
+                iimag = self.iroot[2]
+                for s in range(1 << (LEN-2)):
+                    irot2 = (irot*irot) % self.mod
+                    irot3 = (irot*irot2) % self.mod
+                    offset = s << (h-LEN+2)
+                    for i in range(p):
+                        a0 = a[i+offset]
+                        a1 = a[i+offset+p]
+                        a2 = a[i+offset+2*p]
+                        a3 = a[i+offset+3*p]
+                        a2na3iimag = (a2-a3)*iimag % self.mod
+                        a[i+offset] = (a0+a1+a2+a3) % self.mod
+                        a[i+offset+p] = (a0-a1+a2na3iimag)*irot % self.mod
+                        a[i+offset+2*p] = (a0+a1-a2-a3)*irot2 % self.mod
+                        a[i+offset+3*p] = (a0-a1-a2na3iimag)*irot3 % self.mod
+                    irot *= self.irate3[(~s & -~s).bit_length()-1]
+                    irot %= self.mod
+                LEN -= 2
+
+    def convolution(self, a, b):
+        n = len(a)
+        m = len(b)
+        if not (a) or not (b):
+            return []
+        if min(n, m) <= 40:
+            res = [0]*(n+m-1)
+            for i in range(n):
+                for j in range(m):
+                    res[i+j] += a[i]*b[j]
+                    res[i+j] %= self.mod
+            return res
+        z = 1 << ((n+m-2).bit_length())
+        a = a+[0]*(z-n)
+        b = b+[0]*(z-m)
+        self.butterfly(a)
+        self.butterfly(b)
+        c = [(a[i]*b[i]) % self.mod for i in range(z)]
+        self.butterfly_inv(c)
+        iz = pow(z, self.mod-2, self.mod)
+        for i in range(n+m-1):
+            c[i] = (c[i]*iz) % self.mod
+        return c[:n+m-1]
+
+
+class mf_graph:
+    n = 1
+    g = [[] for i in range(1)]
+    pos = []
+
+    def __init__(self, N):
+        self.n = N
+        self.g = [[] for i in range(N)]
+        self.pos = []
+
+    def add_edge(self, From, To, cap):
+        assert 0 <= From and From < self.n
+        assert 0 <= To and To < self.n
+        assert 0 <= cap
+        m = len(self.pos)
+        from_id = len(self.g[From])
+        self.pos.append([From, from_id])
+        to_id = len(self.g[To])
+        if From == To:
+            to_id += 1
+        self.g[From].append([To, to_id, cap])
+        self.g[To].append([From, from_id, 0])
+        return m
+
+    def get_edge(self, i):
+        m = len(self.pos)
+        assert 0 <= i and i < m
+        _e = self.g[self.pos[i][0]][self.pos[i][1]]
+        _re = self.g[_e[0]][_e[1]]
+        return [self.pos[i][0], _e[0], _e[2]+_re[2], _re[2]]
+
+    def edges(self):
+        m = len(self.pos)
+        result = []
+        for i in range(m):
+            a, b, c, d = self.get_edge(i)
+            result.append({"from": a, "to": b, "cap": c, "flow": d})
+        return result
+
+    def change_edge(self, i, new_cap, new_flow):
+        m = len(self.pos)
+        assert 0 <= i and i < m
+        assert 0 <= new_flow and new_flow <= new_cap
+        _e = self.g[self.pos[i][0]][self.pos[i][1]]
+        _re = self.g[_e[0]][_e[1]]
+        _e[2] = new_cap-new_flow
+        _re[2] = new_flow
+
+    def flow(self, s, t, flow_limit=(1 << 63)-1):
+        assert 0 <= s and s < self.n
+        assert 0 <= t and t < self.n
+        assert s != t
+
+        def bfs():
+            level = [-1 for i in range(self.n)]
+            level[s] = 0
+            que = collections.deque([])
+            que.append(s)
+            while (que):
+                v = que.popleft()
+                for to, rev, cap in self.g[v]:
+                    if cap == 0 or level[to] >= 0:
+                        continue
+                    level[to] = level[v]+1
+                    if to == t:
+                        return level
+                    que.append(to)
+            return level
+
+        def dfs(v, up):
+            if (v == s):
+                return up
+            res = 0
+            level_v = level[v]
+            for i in range(Iter[v], len(self.g[v])):
+                Iter[v] = i
+                to, rev, cap = self.g[v][i]
+                if (level_v <= level[to] or self.g[to][rev][2] == 0):
+                    continue
+                d = dfs(to, min(up-res, self.g[to][rev][2]))
+                if d <= 0:
+                    continue
+                self.g[v][i][2] += d
+                self.g[to][rev][2] -= d
+                res += d
+                if res == up:
+                    return res
+            level[v] = self.n
+            return res
+
+        flow = 0
+        while (flow < flow_limit):
+            level = bfs()
+            if level[t] == -1:
+                break
+            Iter = [0 for i in range(self.n)]
+            f = dfs(t, flow_limit-flow)
+            if not (f):
+                break
+            flow += f
+        return flow
+
+    def min_cut(self, s):
+        visited = [False for i in range(self.n)]
+        que = collections.deque([])
+        que.append(s)
+        while (len(que) > 0):
+            p = que.popleft()
+            visited[p] = True
+            for to, rev, cap in self.g[p]:
+                if cap and not (visited[to]):
+                    visited[to] = True
+                    que.append(to)
+        return visited
+
+
+# 最長増加部分列（LIS）
+def lis(L: list):
+    dp = [float('inf')]*len(L)
+    for l in L:
+        dp[bisect_left(dp, l)] = l
+    return bisect_left(dp, float('inf'))
+
+
+# Floor Sum
+def floor_sum(n, m, a, b):
+    ret = 0
+    while n > 0 and m > 0:
+        ret += (a // m) * n * (n-1) // 2 + (b // m) * n
+        a, b = a % m, b % m
+        last = a * n + b
+        n, m, a, b = last // m, a, m, last % m
+    return ret
+
+
+def main():
+    N, K = MI()
+    A = [I() for i in range(N)]
+    cnt = 0
+    sa = [1 if y-x > 0 else -1 for x, y in zip(A[:-1], A[1:])]
+    K -= 1
+    N -= 1
+    total = sum(sa[:K])
+    ans = 1 if total == K else 0
+    for i in range(N-K):
+        total += sa[i+K]
+        total -= sa[i]
+        if total == K:
+            ans += 1
+    print(ans)
+
+
+if __name__ == "__main__":
+    main()
