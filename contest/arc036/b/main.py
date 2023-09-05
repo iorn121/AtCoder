@@ -1355,23 +1355,29 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N, K = MI()
-    A = set(LI())
-    light = []
-    dark = []
-    for i in range(N):
-        X, Y = MI()
-        if i+1 in A:
-            light.append((X, Y))
+    N = I()
+    H = [I() for _ in range(N)]
+    max_H = max(H)
+    pcnt = [0]*N
+    pcnt[0] = 1
+    mcnt = [0]*N
+    mcnt[N-1] = 1
+    for i in range(N-1):
+        if H[i] < H[i+1]:
+            pcnt[i+1] = pcnt[i]+1
         else:
-            dark.append((X, Y))
-    dist = 0
-    for dx, dy in dark:
-        tmp = 10**12
-        for x, y in light:
-            tmp = min(tmp, (dx-x)**2+(dy-y)**2)
-        dist = max(dist, tmp)
-    print(math.sqrt(dist))
+            pcnt[i+1] = 1
+    for i in range(N-1, 0, -1):
+        if H[i] < H[i-1]:
+            mcnt[i-1] = mcnt[i]+1
+        else:
+            mcnt[i-1] = 1
+    ans = 0
+    for i in range(N):
+        ans = max(ans, pcnt[i]+mcnt[i]-1)
+    # print(pcnt)
+    # print(mcnt)
+    print(ans)
 
 
 if __name__ == "__main__":

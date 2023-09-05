@@ -1355,23 +1355,29 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N, K = MI()
-    A = set(LI())
-    light = []
-    dark = []
-    for i in range(N):
-        X, Y = MI()
-        if i+1 in A:
-            light.append((X, Y))
-        else:
-            dark.append((X, Y))
-    dist = 0
-    for dx, dy in dark:
-        tmp = 10**12
-        for x, y in light:
-            tmp = min(tmp, (dx-x)**2+(dy-y)**2)
-        dist = max(dist, tmp)
-    print(math.sqrt(dist))
+    N = I()
+    A = LI()
+    # prms = prime_list(10**6)
+    # print(len(prms))
+    # print(prms)
+    primes = collections.defaultdict(int)
+    MOD = 10**9+7
+    memo = [{} for i in range(N)]
+    for i, a in enumerate(A):
+        for p, n in prime_factorization(a):
+            primes[p] = max(primes[p], n)
+            memo[i][p] = n
+    lcm = 1
+    for p, n in primes.items():
+        lcm *= pow(p, n, MOD)
+        lcm %= MOD
+    ans = 0
+    # print(primes)
+    for a in A:
+        tmp = lcm*pow(a, MOD-2, MOD)
+        ans += tmp
+        ans %= MOD
+    print(ans)
 
 
 if __name__ == "__main__":
