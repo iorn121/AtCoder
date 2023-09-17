@@ -1355,24 +1355,30 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    C = []
-    for i in range(3):
-        X = LI()
-        C += X
-    ans = 0
-    rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]]
-    for chain in itertools.permutations(range(9)):
-        flg = True
-        for r1, r2, r3 in rows:
-            if C[r1] == C[r2] and chain[r1] < chain[r3] and chain[r2] < chain[r3]:
-                flg = False
-            if C[r1] == C[r3] and chain[r1] < chain[r2] and chain[r3] < chain[r2]:
-                flg = False
-            if C[r2] == C[r3] and chain[r2] < chain[r1] and chain[r3] < chain[r1]:
-                flg = False
-        if flg:
-            ans += 1
-    print(ans/362880)
+    N, M = MI()
+    event = []
+    rec = [-1]*M
+    for i in range(M):
+        T, W, S = MI()
+        event.append((T, W, i))
+        event.append((T+S, -W, i))
+    event.sort()
+    row = [i for i in range(N)]
+    ans = [0]*N
+    cnt = 0
+    for et, ew, ei in event:
+        if ew > 0:
+            if not row:
+                continue
+            now = heapq.heappop(row)
+            ans[now] += ew
+            rec[ei] = now
+        else:
+            if rec[ei] >= 0:
+                heapq.heappush(row, rec[ei])
+        # print(et, ew, ei, row)
+    for a in ans:
+        print(a)
 
 
 if __name__ == "__main__":
