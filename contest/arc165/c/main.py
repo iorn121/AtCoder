@@ -1355,7 +1355,23 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
+    N, M = MI()
+    mf = mf_graph(N*2+2)
+    for i in range(N):
+        mf.add_edge(0, i+1, 1)
+        mf.add_edge(N+i+1, N*2+1, 1)
+    for _ in range(M):
+        A, B, W = MI()
+        mf.add_edge(A, B+N, W)
+        mf.add_edge(B, A+N, W)
+    mf.flow(0, N*2+1)
+    ans = float("inf")
+    for i in range(N):
+        for j in mf.g[i+1]:
+            if j[2] != 1:
+                ans = min(ans, j[2])
+
+    print(ans)
 
 
 if __name__ == "__main__":

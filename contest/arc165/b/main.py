@@ -1355,7 +1355,41 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
+    N, K = MI()
+    P = LI()
+
+    # ans = P[:N-K]+sorted(P[N-K:])
+    # for i in range(N-K+1):
+    #     tmp = P[:i]+sorted(P[i:i+K])+P[i+K:]
+    #     if tmp > ans:
+    #         ans = tmp
+    # print("ans", *ans)
+
+    ss = SortedSet()
+    for i in range(K):
+        ss.add(P[N-1-i])
+    lis = 1
+    cnt = 1
+    order = [0]*N
+    for i, p in enumerate(P):
+        if i > 0:
+            if p > P[i-1]:
+                cnt += 1
+                lis = max(lis, cnt)
+            else:
+                lis = max(lis, cnt)
+                cnt = 1
+        order[i] = cnt
+    # print(order)
+    if lis >= K:
+        print(*P)
+        exit()
+
+    tmp = N-K
+    while tmp >= 0 and order[tmp] > 1:
+        tmp -= 1
+    ans = P[:tmp]+sorted(P[tmp:tmp+K])+P[tmp+K:]
+    print(*ans)
 
 
 if __name__ == "__main__":
