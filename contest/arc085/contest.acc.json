@@ -1,0 +1,53 @@
+{
+  "contest": {
+    "id": "arc085",
+    "title": "AtCoder Regular Contest 085",
+    "url": "https://atcoder.jp/contests/arc085"
+  },
+  "tasks": [
+    {
+      "id": "arc085_a",
+      "label": "C",
+      "title": "HSI",
+      "url": "https://atcoder.jp/contests/arc085/tasks/arc085_a",
+      "directory": {
+        "path": "c",
+        "testdir": "tests",
+        "submit": "main.py"
+      }
+    },
+    {
+      "id": "arc085_b",
+      "label": "D",
+      "title": "ABS",
+      "url": "https://atcoder.jp/contests/arc085/tasks/arc085_b",
+      "directory": {
+        "path": "d",
+        "testdir": "tests",
+        "submit": "main.py"
+      }
+    },
+    {
+      "id": "arc085_c",
+      "label": "E",
+      "title": "MUL",
+      "url": "https://atcoder.jp/contests/arc085/tasks/arc085_c",
+      "directory": {
+        "path": "e",
+        "testdir": "tests",
+        "submit": "main.py"
+      }
+    },
+    {
+      "id": "arc085_d",
+      "label": "F",
+      "title": "NRE",
+      "url": "https://atcoder.jp/contests/arc085/tasks/arc085_d",
+      "directory": {
+        "path": "f",
+        "testdir": "tests",
+        "submit": "main.py"
+      }
+    }
+  ]
+}
