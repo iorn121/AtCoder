@@ -1355,7 +1355,34 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
+    N, A, B, C = MI()
+    D = LII(N)
+
+    G = [[] for i in range(2*N)]
+    for i in range(N-1):
+        for j in range(i+1, N):
+            cost = D[i][j]*A
+            G[i].append((j, cost))
+            G[j].append((i, cost))
+            cost = D[i][j]*B+C
+            G[i+N].append((j+N, cost))
+            G[j+N].append((i+N, cost))
+            G[i].append((j+N, cost))
+            G[j].append((i+N, cost))
+    # 0->N-1or2*N-1へのダイクストラ法
+    INF = 10**18
+    dist = [INF]*(2*N)
+    dist[0] = 0
+    que = [(0, 0)]
+    while que:
+        d, v = heapq.heappop(que)
+        if dist[v] < d:
+            continue
+        for to, cost in G[v]:
+            if dist[to] > dist[v] + cost:
+                dist[to] = dist[v] + cost
+                heapq.heappush(que, (dist[to], to))
+    print(min(dist[N-1], dist[2*N-1]))
 
 
 if __name__ == "__main__":

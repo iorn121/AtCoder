@@ -1359,16 +1359,27 @@ def main():
     timeline = []
     for i in range(N):
         T, D = MI()
-        heapq.heappush(timeline, (T, T+D))
-    now = 0
+        timeline.append((T, T+D))
+    timeline.sort()
     ans = 0
-    while timeline:
-        T, D = heapq.heappop(timeline)
-        if now < T:
-            now = T+1
-            ans += 1
-        elif now <= D:
-            now += 1
+    nxt = 0
+    hq = []
+    x = 0
+    while True:
+        x += 1
+        if not hq:
+            if nxt == N:
+                break
+            x = timeline[nxt][0]
+        while nxt < N and timeline[nxt][0] == x:
+            heapq.heappush(hq, timeline[nxt][1])
+            nxt += 1
+        while hq and hq[0] < x:
+            heapq.heappop(hq)
+        # print(hq)
+        if hq:
+            c = heapq.heappop(hq)
+            # print(c)
             ans += 1
     print(ans)
 
