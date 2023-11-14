@@ -1356,6 +1356,17 @@ def floor_sum(n, m, a, b):
 
 def main():
     N = I()
+    slimes=collections.defaultdict(int)
+    for _ in range(N):
+        S,C=MI()
+        S_2=S&-S
+        slimes[S//S_2]+=C*S_2
+    # print(slimes)
+    ans=0
+    for k,v in slimes.items():
+        ans+=v.bit_count()
+    print(ans)
+
 
 
 if __name__ == "__main__":
