@@ -1357,44 +1357,16 @@ def floor_sum(n, m, a, b):
 def main():
     N,S = MI()
     A=LI()
-    num_list=[0]*N
-    cnt=0
-    group=1
-    group_sum=[]
+    A_accum=list(itertools.accumulate(A,initial=0))
+    limit=[-1]*N
     for i,a in enumerate(A):
-        if cnt+a>S:
-            group_sum.append(cnt)
-            cnt=0
-            group+=1
-        cnt+=a
-        num_list[i]=group
-    group_sum.append(cnt)
-    # print(num_list)
-    total=sum(num_list)
-    ans=0
-    print(group_sum)
-    g_id=0
-    for i in range(N):
-        ans+=total
-        print(total)
-        total-=1
-        g_id=num_list[i]
-        if i>0:
-            if num_list[i-1]!=g_id:
-                print("group change",i,g_id,N-i-1)
-                print("diff",num_list[i-1],g_id)
-                total-=N-i-1
-        if g_id<len(group_sum):
-            group_sum[g_id-1]-=A[i]
-            print(group_sum)
-            if group_sum[g_id-1]>0 and group_sum[g_id]+group_sum[g_id-1]<=S:
-                print("group merge",i,g_id,N-i-2)
-                x=i
-                while num_list[x]==g_id:
-                    num_list[x]=g_id+1
-                    x+=1
-                total-=N-i-2
-    print(ans)
+        p=bisect_right(A_accum,S+A_accum[i])
+        limit[i]=p-1
+    
+    dp=[0]*(N+1)
+    for i in range(N-1,-1,-1):
+        dp[i]=dp[limit[i]]+N-i
+    print(sum(dp))
 
 
 if __name__ == "__main__":
