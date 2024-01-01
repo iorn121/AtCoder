@@ -936,7 +936,12 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    N,K = MI()
+    exception=(N-1)**3
+    exception+=(N-1)*3
+    exception+=(K-1)*(K-2)*3
+    exception+=(N-K)*(N-K-1)*3
+    print((N**3-exception)/N**3)
 
 
 main()
