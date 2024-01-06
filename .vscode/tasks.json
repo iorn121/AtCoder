@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "oj t",
+      "label": "oj t python3",
       "type": "shell",
       "command": "/home/iori/.local/bin/oj t -c 'python3 ${file}' -d ${fileDirname}/tests",
 
@@ -14,6 +14,11 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "oj t cpp",
+      "type": "shell",
+      "command": "/home/iori/.local/bin/oj t -c ${fileDirname}/a.out -d ${fileDirname}/tests"
     }
   ]
 }
