@@ -1031,7 +1031,18 @@ class ModInt:
 
 def main():
     N = I()
-
+    points=[]
+    yx=[]
+    y_x=[]
+    for _ in range(N):
+        x,y=LI()
+        points.append((x,y))
+        yx.append(x+y)
+        y_x.append(y-x)
+    yx.sort()
+    y_x.sort()
+    ans=max(yx[-1]-yx[0],y_x[-1]-y_x[0])
+    print(ans)
 
 if __name__ == "__main__":
     main()
