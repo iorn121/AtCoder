@@ -883,21 +883,34 @@ class SortedMultiset(Generic[T]):
 N = I()
 A = LI()
 
-thre = math.gcd(A[0], A[1])
-if thre != 1:
-    check = A[0]
-    for a in A[1:]:
-        check = math.gcd(check, a)
-    if check == 1:
-        print("setwise coprime")
-    else:
-        print("not coprime")
-else:
-    flg = True
-    mult = A[0]
-    for a in A[1:]:
-        gcd = math.gcd(mult, a)
-        if gcd != 1:
-            flg = False
-        mult *= a
-    print("pairwise coprime" if flg else "not coprime")
+primes=prime_list(10**3+1)
+prime_factors=[]
+for i in range(2,10**3+1):
+    if primes[i]:
+        prime_factors.append(i)
+# print(len(prime_factors))
+prime_check=[0]*(10**6+1)
+isPairwise=True
+agcd=A[0]
+for a in A:
+    agcd=math.gcd(agcd,a)
+    for p in prime_factors:
+        if a%p==0:
+            if prime_check[p]>0:
+                isPairwise=False
+            prime_check[p]+=1
+            while a%p==0:
+                a//=p
+    if a!=1:
+        if prime_check[a]>0:
+            isPairwise=False
+        prime_check[a]+=1
+# print(prime_check[:max(A)+1])
+if isPairwise:
+    print("pairwise coprime")
+    exit()
+
+if agcd==1:
+    print("setwise coprime")
+    exit()
+print("not coprime")
