@@ -937,6 +937,20 @@ def make_divisors(n):
 
 def main():
     N = I()
+    scores=[]
+    for _ in range(N):
+        a = I()
+        if a!=0:
+            scores.append(a)
+    scores.sort(reverse=True)
+    # print(scores)
+    Q=I()
+    for _ in range(Q):
+        k = I()
+        if k>=len(scores):
+            print(0)
+        else:
+            print(scores[k]+1)
 
 
 if __name__ == "__main__":
