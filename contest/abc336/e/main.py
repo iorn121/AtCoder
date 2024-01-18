@@ -1365,12 +1365,12 @@ def main():
             for j in range(s+1):
                 for k in range(s):
                     for l in range(2):
-                        for t in range(10):
-                            if j+t>s:
+                        for m in range(10):
+                            if j+m>s:
                                 continue
-                            if l and t>int(str(N)[i]):
+                            if l and m>int(str(N)[i]):
                                 continue
-                            dp[i+1][j+t][(j*10+t)%s][l and(t==int(str(N)[i]))]+=dp[i][j][k][l]
+                            dp[i+1][j+m][(k*10+m)%s][l and(m==int(str(N)[i]))]+=dp[i][j][k][l]
         ans+=dp[d][s][0][1]+dp[d][s][0][0]
     print(ans)
 
