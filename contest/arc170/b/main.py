@@ -1353,46 +1353,25 @@ def floor_sum(n, m, a, b):
         n, m, a, b = last // m, a, m, last % m
     return ret
 
-
 def main():
     N = I()
     A=LI()
-    candidate=[]
-    sas={A[i]-A[1]:i for i in range(2,N)}
-    # print(sas)
-    seen={}
-    c=0
-    for i in range(1,N-1):
-        sa=A[i]-A[i-1]
-        offset=A[i+1]-A[i]
-        seen[-sa]=i-1
-        # print(A[i],seen)
-        seen2={}
-        for k,v in seen.items():
-            sa2=k-offset
-            sa3=-k+c
-            # print(sa3)
-            if sa3 in sas and sas[sa3]>i:
-                candidate.append((v,sas[sa3]))
-            seen2[sa2]=v
-        c=A[i+1]-A[1]
-        seen=seen2
-        # print(i,candidate)
-    # print(candidate)
-    ans=0
-    candidate.sort()
-    seen=set()
-    last=0
-    for l,r in candidate:
-        if l in seen:
-            continue
-        # print(l,r)
-        # print(N-r)
-        ans+=N-r+(l-last)
-        last=l+1
-        seen.add(l)
+    max_A=max(A)
+    ans=N*(N-1)//2
+    for i in range(N-1):
+        seen=set()
+        now=set([A[i]])
+        end=min(N,i+max_A*2+1)
+        for j in range(i+1,end):
+            if A[j] in seen:
+                # print(i,j)
+                break
+            ans-=1
+            for a in now:
+                seen.add(A[j]*2-a)
+            now.add(A[j])
+            # print(i,j,seen)
     print(ans)
-
 
 if __name__ == "__main__":
     main()
