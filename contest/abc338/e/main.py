@@ -1355,8 +1355,29 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
+    n = int(input())
+    v = [0] * (2 * n)
+    for i in range(n):
+        a, b = map(int, input().split())
+        a -= 1
+        b -= 1
+        if a > b:
+            a, b = b, a
+        v[a] = (0, i)
+        v[b] = (1, i)
+    st = []
+    for i in range(2 * n):
+        t, id = v[i]
+        if t == 0:
+            st.append(id)
+        else:
+            if st[-1] != id:
+                print("Yes")
+                exit(0)
+            st.pop()
+    print("No")
 
 
 if __name__ == "__main__":
     main()
+  
