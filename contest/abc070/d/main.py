@@ -933,3 +933,30 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+def main():
+    N=I()
+    G=[[] for _ in range(N)]
+    for _ in range(N-1):
+        a,b,c=MI()
+        a-=1
+        b-=1
+        G[a].append([b,c])
+        G[b].append([a,c])
+    
+    Q,K=MI()
+    hq=[K-1]
+    dist=[float('inf')]*N
+    dist[K-1]=0
+    while hq:
+        v=heapq.heappop(hq)
+        for u,c in G[v]:
+            if dist[u]>dist[v]+c:
+                dist[u]=dist[v]+c
+                heapq.heappush(hq,u)
+    for _ in range(Q):
+        x,y=MI()
+        print(dist[x-1]+dist[y-1])
+    
+if __name__ == '__main__':
+    main()
