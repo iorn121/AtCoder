@@ -1356,6 +1356,15 @@ def floor_sum(n, m, a, b):
 
 def main():
     N = I()
+    ans=0
+    num_dict=collections.defaultdict(int)
+    for i in range(1,N+1):
+        s=str(i)
+        num_dict[(s[0],s[-1])]+=1
+    for i in range(1,10):
+        for j in range(1,10):
+            ans+=num_dict[(str(i),str(j))]*num_dict[(str(j),str(i))]
+    print(ans)
 
 
 if __name__ == "__main__":
