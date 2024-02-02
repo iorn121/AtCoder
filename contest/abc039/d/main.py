@@ -933,3 +933,49 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+
+H,W=map(int, input().split())
+S=SS(H)
+
+S_flatten=set()
+for i in range(H):
+    for j in range(W):
+        if S[i][j]=="#":
+            S_flatten.add(i*W+j)
+
+S=["#"*(W+2)]+["#"+s+"#" for s in S]+["#"*(W+2)]
+# print(S)
+point_cnt=[0]*(H*W)
+
+for i in range(H):
+    for j in range(W):
+        for k in range(-1,2):
+            for l in range(-1,2):
+                if S[i+1+k][j+1+l]=="#":
+                    point_cnt[i*W+j]+=1
+
+# print(point_cnt)
+new_S_flatten=set()
+offset=[[0,0],[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
+for i in range(H):
+    for j in range(W):
+        if point_cnt[i*W+j]==9:
+            for k,l in offset:
+                if 0<=i+k<H and 0<=j+l<W:
+                    new_S_flatten.add((i+k)*W+j+l)
+
+# print(S_flatten)
+# print(new_S_flatten)
+
+if new_S_flatten==S_flatten:
+    print("possible")
+    for i in range(H):
+        for j in range(W):
+            if point_cnt[i*W+j]==9:
+                print("#",end="")
+            else:
+                print(".",end="")
+        print()
+else:
+    print("impossible")
