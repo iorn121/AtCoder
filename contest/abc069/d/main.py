@@ -933,3 +933,26 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+H,W=MI()
+N=I()
+A=[(a,i) for i,a in enumerate(LI(),1)]
+A.sort(reverse=True)
+ans=[[0]*W for _ in range(H)]
+h=0
+w=0
+for a,i in A:
+    while a:
+        ans[h][w]=i
+        a-=1
+        if h%2==0:
+            if w==W-1:
+                h+=1
+            else:
+                w+=1
+        else:
+            if w==0:
+                h+=1
+            else:
+                w-=1
+print(*[" ".join(map(str,ans[i])) for i in range(H)],sep="\n")
