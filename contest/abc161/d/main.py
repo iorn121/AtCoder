@@ -1365,9 +1365,8 @@ def main():
             print(x)
             exit()
         for i in range(10):
-            num.append(x*10+i)
-
-    
+            if abs(x%10-i) <= 1:
+                num.append(x*10+i)
 
 
 if __name__ == "__main__":
