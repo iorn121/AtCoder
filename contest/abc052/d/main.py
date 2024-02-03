@@ -933,3 +933,11 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+
+N,A,B=MI()
+X=LI()
+ans=0
+for fr,to in zip(X,X[1:]):
+    ans+=min((to-fr)*A,B)
+print(ans)
