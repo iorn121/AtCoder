@@ -933,3 +933,26 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+N=I()
+S1=S()
+S2=S()
+ans=3
+cnt=0
+first=True
+MOD=10**9+7
+for s1,s2 in zip(S1,S2):
+    if s1==s2:
+        if cnt==0 and not first:
+            ans*=2
+        else:
+            ans*=1
+            cnt=0
+    else:
+        cnt+=1
+        if cnt==1:
+            ans*=2
+        elif cnt%2==1:
+            ans*=3
+    first=False
+print(ans%MOD)
