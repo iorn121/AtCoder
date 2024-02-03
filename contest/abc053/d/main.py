@@ -933,3 +933,17 @@ def make_divisors(n):
                 upper_divisors.append(n//i)
         i += 1
     return lower_divisors + upper_divisors[::-1]
+
+N=I()
+A=LI()
+A.sort()
+eat=collections.Counter(A)
+
+# print(eat)
+ans=N
+eat_sum=0
+for k,v in eat.items():
+    eat_sum+=v-1
+# print(eat_sum)
+ans-=(eat_sum+1)//2*2
+print(ans)
