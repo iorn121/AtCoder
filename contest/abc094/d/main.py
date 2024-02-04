@@ -920,3 +920,13 @@ def inversion_num(L: list):
         cnt += i-bit.sum(l)
         bit.add(l, 1)
     return cnt
+
+N=I()
+A=LI()
+A.sort()
+n=A[-1]
+ri=bisect_right(A,n//2)
+r=A[ri-1]
+if n-A[ri]>r:
+    r=A[ri]
+print(n,r)
