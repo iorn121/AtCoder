@@ -1030,7 +1030,31 @@ class ModInt:
 
 
 def main():
-    N = I()
+    N,X = MI()
+    max_burger = [1]
+    max_patty = [1]
+    for i in range(N):
+        max_burger.append(max_burger[-1]*2+3)
+        max_patty.append(max_patty[-1]*2+1)
+    max_burger.reverse()
+    max_patty.reverse()
+    ans=0
+    # print(max_burger)
+    # print(max_patty)
+    for i in range(N+1):
+        if X==0:
+            break
+        elif X==max_burger[i]:
+            ans+=max_patty[i]
+            X-=max_burger[i]
+        elif X>=max_patty[i]:
+            ans+=max_patty[i+1]+1
+            X-=max_patty[i]
+        else:
+            X-=1
+        # print(X,ans)
+
+    print(ans)
 
 
 if __name__ == "__main__":
