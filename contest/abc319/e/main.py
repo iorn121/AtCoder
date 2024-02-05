@@ -1355,7 +1355,21 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
+    N, X, Y = MI()
+    dp=[i for i in range(840)]
+    for _ in range(N-1):
+        P,T=MI()
+        for i in range(840):
+            dp[i]=(dp[i]+P-1)//P*P+T
+    # print(dp)
+    Q=I()
+    for _ in range(Q):
+        Q=I()
+        ans=Q+X
+        # print(ans//840*840,dp[ans%840])
+        ans=ans//840*840+dp[ans%840]+Y
+        print(ans)
+
 
 
 if __name__ == "__main__":
