@@ -1382,8 +1382,6 @@ def main():
                 ans+=dp[i]*modinv_N
                 ans%=MOD
     print(ans%MOD)
-    for i in range(4):
-        print(modinv_N**i%MOD)
 
 if __name__ == "__main__":
     main()
