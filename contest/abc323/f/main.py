@@ -1355,7 +1355,45 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
+    sx,sy,tx,ty,ux,uy=map(int,input().split())
+    # 平行移動と反転により、目的地を原点、荷物を第一象限にする
+    sx-=ux
+    sy-=uy
+    tx-=ux
+    ty-=uy
+    if tx<0:
+        sx*=-1
+        tx*=-1
+    if ty<0:
+        sy*=-1
+        ty*=-1
+
+    def push_down(sx,sy,tx,ty):
+        # 高橋君が(sx,sy),荷物が(tx,ty)にあるとき、荷物を(tx,0)に移動するまでの最小行動回数と、移動後の高橋君の座標、荷物の座標を返す
+        # ty==0なら何もしない
+        if ty==0:
+            return 0, sx,sy, tx,ty
+        # (tx,ty+1)に行く
+        step=abs(sx-tx)+abs(sy-(ty+1))
+        # 荷物を迂回する必要があるなら+2
+        if sx==tx and sy<ty:
+            step+=2
+        # 下に押す
+        return step+ty, tx,1, tx,0
+
+    ans=[]
+    for _ in range(2):
+        # 荷物を下→左の順に押す
+        # 荷物を下に押す
+        step1,a,b,c,d=push_down(sx,sy,tx,ty)
+        # 軸を入れ替えることで左に押すことを下に押すことに帰着
+        step2,*_=push_down(b,a,d,c)
+        ans.append(step1+step2)
+        # 軸を入れ替えることで左→下のケースを下→左に帰着
+        sx,sy=sy,sx
+        tx,ty=ty,tx
+    print(min(ans))
+
 
 
 if __name__ == "__main__":
