@@ -1355,8 +1355,35 @@ def floor_sum(n, m, a, b):
 
 
 def main():
-    N = I()
-
+    N, X = MI()
+    T=LI()
+    q=collections.deque()
+    q.append((0,0))
+    modinv_N=pow(N,MOD-2,MOD)
+    ans=0
+    # while q:
+    #     time, now = q.popleft()
+    #     if time+T[0]>X:
+    #         ans+=pow(modinv_N,now+1,MOD)
+    #         # print(f"{time}s, 1/N^{now+1}")
+    #         ans%=MOD
+    #         continue
+    #     for i in range(N):
+    #         if time+T[i]<=X:
+    #             q.append((time+T[i], now+1))
+    dp=[0]*(X+2)
+    dp[0]=1
+    for i in range(X+1):
+        for j in range(N):
+            if i+T[j]<=X:
+                dp[i+T[j]]+=dp[i]*modinv_N
+                dp[i+T[j]]%=MOD
+            elif i+T[j]>X and j==0:
+                ans+=dp[i]*modinv_N
+                ans%=MOD
+    print(ans%MOD)
+    for i in range(4):
+        print(modinv_N**i%MOD)
 
 if __name__ == "__main__":
     main()
