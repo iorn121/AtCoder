@@ -445,7 +445,7 @@ class SegTree:
         for i in range(self.num-1, 0, -1):
             self.tree[i] = self.segfunc(self.tree[2*i], self.tree[2*i+1])
 
-    def segfunc(x, y):
+    def segfunc(self,x, y):
         return x+y
 
     def add(self, k, x):
@@ -1336,7 +1336,25 @@ class mf_graph:
 
 
 def main():
-    N = I()
+    N,M = MI()
+    P=LI()
+    L=LI()
+    D=LI()
+    P.sort()
+    LD=[(l,d) for l,d in zip(L,D)]
+    LD.sort(reverse=True)
+    # print(LD)
+    ans=sum(P)
+    candidate=[]
+    for p in P:
+        if not LD:
+            break
+        while LD and p>=LD[-1][0]:
+            l,d=LD.pop()
+            heapq.heappush(candidate,-d)
+        if candidate:
+            ans+=heapq.heappop(candidate)
+    print(ans)
 
 
 if __name__ == "__main__":
