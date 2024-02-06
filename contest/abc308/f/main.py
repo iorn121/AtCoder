@@ -1334,27 +1334,27 @@ class mf_graph:
                     que.append(to)
         return visited
 
+import sortedcontainers
 
 def main():
     N,M = MI()
-    P=LI()
+    P=sortedcontainers.SortedList(LI())
     L=LI()
     D=LI()
-    P.sort()
-    LD=[(l,d) for l,d in zip(L,D)]
-    LD.sort(reverse=True)
-    # print(LD)
-    ans=sum(P)
-    candidate=[]
-    for p in P:
-        if not LD:
-            break
-        while LD and p>=LD[-1][0]:
-            l,d=LD.pop()
-            heapq.heappush(candidate,-d)
-        if candidate:
-            ans+=heapq.heappop(candidate)
+    DL=[(d,l) for d,l in zip(D,L)]
+    DL.sort()
+    ans = sum(P)
+
+    while DL:
+        d,l = DL.pop()
+        a = P.bisect_left(l)
+        if a == len(P):
+            continue
+        else:
+            ans -= d
+            P.discard(P[a])
     print(ans)
+
 
 
 if __name__ == "__main__":
