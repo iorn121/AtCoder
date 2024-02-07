@@ -878,3 +878,14 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
+
+A,B=MI()
+if A>B:
+    A,B=B,A
+rt3=3**0.5
+if A*A*4<=B*B*3:
+    print(A*2/rt3)
+else:
+    ans=math.sqrt(4*A*A-4*rt3*A*B+4*B*B)
+    # ans=A/math.cos(math.atan(2*B/A-math.sqrt(3)))
+    print(ans)
