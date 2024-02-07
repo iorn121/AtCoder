@@ -1337,11 +1337,20 @@ class mf_graph:
 
 def main():
     N, M = MI()
-    A = []
-    for i in range(N):
-        A += sorted(LI())
-    ans = N*(N-1)//2*M*(M-1)//2
-    print(ans+inversion_num(A))
+    A = [LI() for _ in range(N)]
+    sorted_A=sorted(item for sublist in A for item in sublist)
+    compressed_A={v:i for i,v in enumerate(sorted_A,1)}
+    ans = N*(N-1)//2*M*(M+1)//2
+    # print(ans)
+    bit=BIT(N*M+1)
+    for i in range(N-1,-1,-1):
+        for j in range(M):
+            a=compressed_A[A[i][j]]
+            ans+=bit.sum(a)
+        for j in range(M):
+            a=compressed_A[A[i][j]]
+            bit.add(a,1)
+    print(ans)
 
 
 if __name__ == "__main__":
