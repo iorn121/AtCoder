@@ -878,3 +878,40 @@ class SortedMultiset(Generic[T]):
                 return ans + bisect_right(a, x)
             ans += len(a)
         return ans
+
+N,M=MI()
+can_move=[S() for _ in range(N)]
+
+dp_forward=[float("inf")]*N
+dp_backward=[float("inf")]*N
+dp_forward[0]=0
+dp_backward[N-1]=0
+for i in range(N-1):
+    for j in range(M):
+        if i+j>=N:
+            break
+        if can_move[i][j]=="1":
+            dp_forward[i+j+1]=min(dp_forward[i]+1,dp_forward[i+j+1])
+for i in range(N-1,-1,-1):
+    for j in range(M):
+        if i-j<1:
+            break
+        if can_move[i-j-1][j]=="1":
+            dp_backward[i-j-1]=min(dp_backward[i]+1,dp_backward[i-j-1])
+# print(dp_forward)
+# print(dp_backward)
+ans=[]
+for skip in range(1,N-1):
+    l=max(0,skip+1-M)
+    step=float("inf")
+    for i in range(l,skip):
+        r=min(N,i+M+1)
+        for j in range(skip+1,r):
+            if can_move[i][j-i-1]=="1":
+                step=min(step,dp_forward[i]+dp_backward[j]+1)
+    # print("step",step)
+    if step==float("inf"):
+        ans.append(-1)
+    else:
+        ans.append(step)
+print(*ans)
