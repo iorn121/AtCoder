@@ -1,46 +1,47 @@
-import itertools
+X,Y,A,B,C=map(int,input().split())
+
+def check(w,h,area):
+    if w*h>=area:
+        return w,h-(area+w-1)//w
+    else:
+        return -1,-1
+
+def solve_all(nX,nY):
+    nA,nB,nC=A,B,C
+    nX,nY=check(nX,nY,nA)
+    nX,nY=check(nX,nY,nB)
+    nX,nY=check(nX,nY,nC)
+    if nX==-1:
+        return
+    else:
+        print("Yes")
+        exit()
+
+def solve(nX,nY,nA,nB,nC):
+    nY,nX=check(nX,nY,nA)
+    nX,nY=check(nX,nY,nB)
+    nX,nY=check(nX,nY,nC)
+    if nX==-1:
+        return
+    else:
+        print("Yes")
+        exit()
+
+solve_all(X,Y)
+solve_all(Y,X)
+solve(X,Y,A,B,C)
+solve(Y,X,A,B,C)
+solve(X,Y,B,A,C)
+solve(Y,X,B,A,C)
+solve(X,Y,A,C,B)
+solve(Y,X,A,C,B)
+solve(X,Y,C,A,B)
+solve(Y,X,C,A,B)
+solve(X,Y,B,C,A)
+solve(Y,X,B,C,A)
+solve(X,Y,C,B,A)
+solve(Y,X,C,B,A)
 
 
-def embed(axis, menseki):
-    canDo = True
-    newXY = []
-    if len(axis) == 0:
-        canDo = False
-        return canDo, newXY
-    for i in axis:
-        axisX = i[0]
-        axisY = i[1]
-        print(axisX, axisY)
-        if axisX*axisY > menseki:
-            canDo = False
-            return canDo, newXY
-        for j in range(reversed(range(1, axisX))):
-            if menseki % j == 0 and menseki/j <= axisY:
-                Y = menseki//j
-                newXY.append((axisX, axisY-Y))
-                continue
-        for j in range(reversed(range(1, axisY))):
-            if menseki % j == 0 and menseki/j <= axisX:
-                X = menseki//j
-                newXY.append((axisX-X, axisY))
-                continue
-        if len(newXY) == 0:
-            canDo = False
+print("No")
 
-    return canDo, newXY
-
-
-default = list(map(int, input().split()))
-
-XY = default[:2]
-iters = list(itertools.permutations(default[2:]))
-canDo = []
-
-for i in range(6):
-    testXY = [XY[:]]
-    for j in range(3):
-        print(testXY, iters[i][j])
-        can, testXY = embed(testXY, iters[i][j])
-        canDo.append(can)
-
-print("Yes" if True in canDo else "No")
