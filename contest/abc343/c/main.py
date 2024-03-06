@@ -1356,6 +1356,14 @@ def floor_sum(n, m, a, b):
 
 def main():
     N = I()
+    ans=1
+    for i in range(1,10**6):
+        if i**3>N:
+            break
+        x=str(i**3)
+        if x==x[::-1]:
+            ans=i**3
+    print(ans)
 
 
 if __name__ == "__main__":
