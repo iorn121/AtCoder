@@ -1,17 +1,21 @@
-S="wbwbwwbwbwbw"
+S="wbwbwwbwbwbw"*20
 W,B=gets.split.map(&:to_i)
 
-w_cnt=W//7
-b_cnt=B//5
 
-for i in 0..S.size-1
-    for j in 0..w_cnt
-        if S[i+j]!=S[j]
-            break
-        end
-        if j==w_cnt
-            puts "w"
-            exit
+for i in 0..11
+    w_cnt=0
+    b_cnt=0
+    for j in i..i+W+B-1
+        if S[j]=="w"
+            w_cnt+=1
+        else
+            b_cnt+=1
         end
     end
+    # puts "i:#{i}, w_cnt:#{w_cnt}, b_cnt:#{b_cnt}"
+    if w_cnt==W && b_cnt==B
+        puts "Yes"
+        exit
+    end
 end
+puts "No"
