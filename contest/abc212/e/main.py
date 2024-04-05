@@ -9,7 +9,6 @@ for i in range(N):
             continue
         if (i+1,j+1) not in UV and (j+1,i+1) not in UV:
             G[i].append(j)
-            G[j].append(i)
 
 dp=[0]*N
 dp[0]=1
@@ -20,5 +19,5 @@ for k in range(K):
             ndp[j]+=dp[i]
             ndp[j]%=MOD
     dp=ndp[:]
-    print(dp)
+    # print(dp)
 print(dp[0])
