@@ -1,23 +1,25 @@
-N,M,K=map(int,input().split())
-G=[[] for _ in range(N)]
-UV=set([tuple(map(int,input().split())) for _ in range(M)])
-MOD=998244353
+N = 6000
+MOD = 998244353
 
-for i in range(N):
-    for j in range(N):
-        if i==j:
-            continue
-        if (i+1,j+1) not in UV and (j+1,i+1) not in UV:
-            G[i].append(j)
+n, m, k = map(int, input().split())
+e = [[] for _ in range(N)]
+dp = [0]*N
+dp2 = [0]*N
 
-dp=[0]*N
-dp[0]=1
-for k in range(K):
-    ndp=[0]*N
-    for i in range(N):
-        for j in G[i]:
-            ndp[j]+=dp[i]
-            ndp[j]%=MOD
-    dp=ndp[:]
-    # print(dp)
+for _ in range(m):
+    u, v = map(int, input().split())
+    e[u - 1].append(v - 1)
+    e[v - 1].append(u - 1)
+
+dp[0] = 1
+
+for _ in range(k):
+    s = sum(dp)
+    for j in range(n):
+        dp2[j] = s - dp[j]
+        for ii in e[j]:
+            dp2[j] -= dp[ii]
+        dp2[j] %= MOD
+    dp = dp2[:]
+
 print(dp[0])
