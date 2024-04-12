@@ -1,0 +1,5 @@
+N,K=map(int,input().split())
+A=list(map(int,input().split()))
+A_set=set(a for a in A if a<=K)
+ans=(1+K)*K//2-sum(A_set)
+print(ans)
