@@ -936,7 +936,24 @@ def make_divisors(n):
 
 
 def main():
-    N = I()
+    Z=list(input().split())
+    X,Y,R=map(lambda z: int(z.split(".")[0])*10**4+int(z.split(".")[1].ljust(4,"0")) if "." in z else int(z)*10000,Z)
+    # print(X,Y,R)
+    ans=0
+    left_x=(X-R+9999)//10000*10000
+    right_x=(X+R)//10000*10000
+    # print(left_x,right_x)
+    
+    for i in range(left_x,right_x+1,10000):
+        p=int((R**2-(X-i)**2)**0.5)
+        up=((Y+p)//10000+3)*10000
+        while (Y-up)**2+(X-i)**2>R**2 and up>=Y:
+            up-=10000
+        down=((Y-p)//10000-3)*10000
+        while (Y-down)**2+(X-i)**2>R**2 and down<=Y:
+            down+=10000
+        ans+=(up-down)//10000+1
+    print(ans)
 
 
 if __name__ == "__main__":
