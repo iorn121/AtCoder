@@ -21,7 +21,7 @@ def SS(H): return [S() for _ in range(H)]
 def LS(): return list(sys.stdin.readline().rstrip().split())
 def ARRAY(L): return array("i", L)
 
-
+INF = 10**18
 MOD = 998244353
 
 # 累積和 ans=list(itertools.accumulate(L))
@@ -960,6 +960,25 @@ def prime_list(N):
 
 def main():
     N = I()
+    G=[[INF]*N for _ in range(N)]
+    XYZ=[LI() for _ in range(N)]
+    for i in range(N):
+        for j in range(N):
+            x1,y1,z1=XYZ[i]
+            x2,y2,z2=XYZ[j]
+            G[i][j]=abs(x1-x2)+abs(y1-y2)+max(0,z2-z1)
+    # print(G)
+    dp=[[INF]*N for _ in range(1<<N)]
+    dp[0][0]=0
+    for S in range(1<<N):
+        for v in range(N):
+            if dp[S][v]==INF:
+                continue
+            for u in range(N):
+                if S>>u&1:
+                    continue
+                dp[S|1<<u][u]=min(dp[S|1<<u][u],dp[S][v]+G[v][u])
+    print(dp[-1][0])
 
 
 if __name__ == "__main__":
